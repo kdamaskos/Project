@@ -63,7 +63,7 @@ extern  volatile int select_menu;
 extern  volatile int select_submenu;
 
 
-extern volatile int refresh_hour;
+extern volatile int refresh_date;
 extern  volatile int refresh_internet;
 
 

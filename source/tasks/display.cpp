@@ -22,7 +22,7 @@
 #include "icons/water_drop.h"
 
 
-Thread thread(osPriorityNormal-2);
+Thread thread(osPriorityNormal);
 
 
 void live_info_task()
@@ -36,20 +36,6 @@ void live_info_task()
     while(1)
     {
         
-        ThisThread::sleep_for(3s);
-
-        tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi);
-
-        tft.background( BACKGROUND_TOP);
-
-        tft.foreground(BACKGROUND_BOT);
-
-        tft.set_font((unsigned char *)Goudy_Old_Style21x19);
-
-        tft.locate(60, 10);
-
-        tft.printf("-30db");
-
         seconds = time(NULL);  
 
         t = localtime(&seconds); 
@@ -59,12 +45,15 @@ void live_info_task()
             prev_min = t->tm_min;  
 
             prev_hour = t->tm_hour;  
+
+            refresh_date = true;
  
-            update_date_time();   
+            event_flag.set(REFRESH_DISPLAY);
 
         }
 
-        ThisThread::sleep_for(100s);
+        ThisThread::sleep_for(1s);
+
     }
 }
 
@@ -73,7 +62,7 @@ void live_info_task()
 void display() 
 {
 
-    int previous_menu = -2, previous_programs_submenu, previous_options_submenu = SELECT_OPTION;
+    int previous_menu = -2, previous_programs_submenu, previous_options_submenu = SELECT_OPTION, next_water_hour, next_water_min,next_water_program,next_water_day;
 
     init_graphics();
    
@@ -97,10 +86,31 @@ void display()
 
     menu = MENU;
 
-    //thread.start(callback(live_info_task));
+    refresh_date = true;
+
+    thread.start(callback(live_info_task));
+
+    tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi);
+
+    tft.background( BACKGROUND_TOP);
+
+    tft.foreground(BACKGROUND_BOT);
+
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+    tft.locate(60, 10);
+
+    tft.printf("-30db");
 
     while (1) 
     {
+        if (refresh_date)
+        {
+            update_date_time();  
+
+            refresh_date = false;
+        }
+        
 
         switch (menu) 
         {
@@ -351,11 +361,48 @@ void display()
                         shift+=30;
 
                     }
+
                 } 
                 else
                 {
+
                     tft.fillrect( 50, 60, 270,  190,  DarkGrey);
 
+                }
+
+                int ret = calculate_next_water(&next_water_hour, &next_water_min, &next_water_day, &next_water_program );
+                    
+                if (ret) 
+                {
+                    tft.set_font((unsigned char *)Arial24x23);
+                    
+                    tft.locate(330,95);
+
+                    tft.printf("%s",WEEK_DAY[next_water_day]);
+
+                    tft.locate(315,120);
+
+                    tft.set_font((unsigned char *)Arial28x28);
+
+                    tft.printf("%02d:%02d",next_water_hour,next_water_min);
+
+                    tft.locate(300,155);
+
+                    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+                    tft.printf("Program %s",PROGRAM[next_water_program]);
+
+                }
+                else
+                {
+
+                    tft.fillrect( 277, 60, 430, 190,  DarkCyan);
+
+                    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+                    
+                    tft.locate(280,110);
+
+                    tft.printf("No Programed");
                 }
 
                 if (rain_refresh)
@@ -425,7 +472,7 @@ void display()
 
                     tft.foreground( White);
 
-                    tft.locate(135,335);
+                    tft.locate(130,230);
                     
                     tft.printf("25 L/m");
 

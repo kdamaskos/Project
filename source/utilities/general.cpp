@@ -327,120 +327,116 @@ void closeValves() {
   
 }
 
-void calculateNextWater(int next_water_hour,int next_water_minute, int next_water_day, int next_water_program ) {
- 
 
-    int i, j, nextday, today, checkday;
+bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next_water_day, int *next_water_program ) 
+{
+    
+    int next_day;
+
+    *next_water_hour = 24;
+
+    *next_water_minute = 60;
 
     time_t seconds = time(NULL);
 
     struct tm *t = localtime(&seconds);
 
-    next_water_hour = 24;
-    next_water_minute = 60;
-
-    today = t->tm_wday;
-
-      nextday = 0;
-    checkday = 0;
-checknextday:
-    if (today + nextday > 6) 
+    for (int k = 0; k < 8; k++)
     {
-        today = 0;
+        next_day = t->tm_wday + k;
 
-        nextday = 0;
-    }
-
-    for (i = 0; i < TOTAL_PROGRAMS; i++) 
-    
-    {
-        for (j = 0; j < TOTAL_STARTS; j++) 
+        if ( next_day > 6 )
         {
-
-        if (week_days[today + nextday][i]) 
-        { // if water this day
-            if (checkday == 0) 
-            {               // if water today
-
-            if (start_times[j][0][i] < next_water_hour &&  start_times[j][1][i] > -1 && start_times[j][0][i] > t->tm_hour) 
-            {
-
-                next_water_hour = start_times[j][0][i];
-
-                next_water_minute = start_times[j][1][i];
-
-                next_water_day = today + nextday;
-
-                next_water_day += 1;
-
-            if (next_water_day > 6) 
-            {
-                next_water_day = 0;
-            }
-
-            next_water_program = i;
-        } else if(start_times[j][0][i] == next_water_hour &&
-                     start_times[j][1][i] > -1 &&
-                     start_times[j][1][i] < next_water_minute &&
-                     start_times[j][1][i] > t->tm_min) {
-            next_water_hour = start_times[j][0][i];
-            next_water_minute = start_times[j][1][i];
-            next_water_day = today + nextday;
-            next_water_day += 1;
-            if (next_water_day > 6) {
-              next_water_day = 0;
-            }
-            next_water_program = i;
-
-          } else if (start_times[j][0][i] < next_water_hour &&
-                     start_times[j][1][i] > -1 &&
-                     start_times[j][0][i] == t->tm_hour &&
-                     start_times[j][1][i] < next_water_minute &&
-                     start_times[j][1][i] > t->tm_min) {
-            next_water_hour = start_times[j][0][i];
-            next_water_minute = start_times[j][1][i];
-            next_water_day = today + nextday;
-            next_water_day += 1;
-            if (next_water_day > 6) {
-              next_water_day = 0;
-            }
-            next_water_program = i;
-          }
-        } else {
-          if (start_times[j][0][i] < next_water_hour &&
-              start_times[j][1][i] > -1) {
-            next_water_hour = start_times[j][0][i];
-            next_water_minute = start_times[j][1][i];
-            next_water_day = today + nextday;
-            next_water_day += 1;
-            if (next_water_day > 6) {
-              next_water_day = 0;
-            }
-            next_water_program = i;
-          } else if (start_times[j][0][i] == next_water_hour &&
-                     start_times[j][1][i] > -1) {
-            if (start_times[j][1][i] < next_water_minute) {
-              next_water_hour = start_times[j][0][i];
-              next_water_minute = start_times[j][1][i];
-              next_water_day = today + nextday;
-              next_water_day += 1;
-              if (next_water_day > 6) {
-                next_water_day = 0;
-              }
-              next_water_program = i;
-            }
-          }
+            next_day = next_day - 7;
         }
-      }
+
+        for (int i = 0; i < TOTAL_PROGRAMS; i++) 
+        {
+   
+            for (int j = 0; j < TOTAL_STARTS; j++) 
+            {
+                // if water today
+                if ( week_days[next_day][i] && k == 0)
+                {
+                    
+                    if ( start_times[j][0][i] < *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][0][i] > t->tm_hour ) 
+                    {      
+                        
+                        *next_water_hour = start_times[j][0][i];
+
+                        *next_water_minute = start_times[j][1][i];
+
+                        *next_water_day = t->tm_wday;
+
+                        *next_water_program = i;
+                    
+                    }
+                    else if(  start_times[j][0][i] == *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][1][i] < *next_water_minute &&  start_times[j][1][i] > t->tm_min) 
+                    {
+
+                        *next_water_hour = start_times[j][0][i];
+
+                        *next_water_minute = start_times[j][1][i];
+
+                        *next_water_day = t->tm_wday;
+
+                        *next_water_program = i;
+
+                    }
+
+                }// if water next day
+                else if( week_days[next_day][i] )
+                {
+                                        
+                    if ( start_times[j][0][i] < *next_water_hour &&  start_times[j][1][i] > -1  ) 
+                    {      
+                        
+                        *next_water_hour = start_times[j][0][i];
+
+                        *next_water_minute = start_times[j][1][i];
+
+                        *next_water_day = next_day;
+
+                        *next_water_program = i;
+                    
+                    }
+                    else if(  start_times[j][0][i] == *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][1][i] < *next_water_minute )
+                    {
+
+                        *next_water_hour = start_times[j][0][i];
+
+                        *next_water_minute = start_times[j][1][i];
+
+                        *next_water_day = next_day;
+
+                        *next_water_program = i;
+
+                    }
+                }
+
+            }
+        }
+
+        if ( *next_water_hour != 24)
+        {
+            return true;
+        }
+
     }
-  }
-  if (next_water_hour == 24) {
-    nextday++;
-    checkday++;
-    if (checkday < 8) {
-      goto checknextday;
+
+    if ( *next_water_hour != 24)
+    {
+        return true;
     }
-  }
-  function_mutex.unlock();
- 
+    else
+    {
+        return false;
+    }
+
 }
+        
+
+
+
+
+

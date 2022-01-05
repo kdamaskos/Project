@@ -243,7 +243,6 @@ reconnect:
     {
         printf("rc from manual subscribe is %d\r\n", rc);
 
-   
     }
 
 

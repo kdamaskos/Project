@@ -21,13 +21,11 @@
 
 Thread thread1(osPriorityNormal, 10 * 1024);
 
-// Thread thread1(osPriorityNormal);
+Thread thread2(osPriorityNormal);
 
-Thread thread2(osPriorityNormal+20);
+Thread thread3(osPriorityNormal);
 
-Thread thread3(osPriorityNormal+5);
-
-Thread thread4(osPriorityNormal);
+Thread thread4(osPriorityNormal+1);
 
 
 

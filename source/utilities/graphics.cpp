@@ -240,5 +240,9 @@ void auto_graphics()
     tft.locate(210,200);
 
     tft.printf("Rain");
+
+    tft.locate(290,70);
+
+    tft.printf("Next Water");
 }
 

@@ -16,13 +16,13 @@
 void valves_control() 
 {
 
-
     time_t seconds;
 
     struct tm *t;
 
     int start_time, current_time, t1,t2, watering_program, time_shift = 0;
 
+    is_watering = false;
 
     while(1)
     {
@@ -49,7 +49,9 @@ void valves_control()
 
                                 is_watering = true;
 
-                                start_time = time(NULL);                               
+                                start_time = time(NULL);    
+
+                                calculate_schedule(watering_program);                           
 
                                 break;
                             }
