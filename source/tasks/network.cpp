@@ -1,5 +1,6 @@
 
 #include "include/network.h"
+
 #include "config/pins_config.h"
 #include "mbed.h"
 #include "network.h"
@@ -12,6 +13,10 @@
 #include <time.h>
 #include <utilities/include/network_utils.h>
 #include <utilities/include/json_parser.h>
+
+
+
+#include <utilities/include/server.h>
 
 
 
@@ -46,7 +51,7 @@ DigitalInOut power_esp(PA_11);
 //b72bf77dd82cb3ff9a431a86b59c42c6
 
 
-ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
+
 
 #define BUFFER_SIZE  600
 #define TOTAL_BUFFER_SIZE 1200
@@ -58,11 +63,13 @@ char total_buffer[BUFFER_SIZE];
 char ServerName[] = "api.openweathermap.org";
 char http_cmd[] = "GET /data/2.5/weather?q=Athens&appid=d850f7f52bf19300a9eb4b0aa6b80f0d HTTP/1.0\r\n\r\n";
  
-
+/*
 void weather_retrieve_task()
 {
 
      printf(" Welcome \n");
+
+
 
     SocketAddress a;
     esp.get_ip_address(&a);
@@ -107,27 +114,33 @@ void weather_retrieve_task()
 
 }
 
-
-NTPClient ntp(&esp);
-
-//Store device IP
-SocketAddress deviceIP;
-//Store broker IP
-SocketAddress MQTTBroker;
-
-TCPSocket socket;
-
-MQTTClient client(&socket);
-
+*/
 
 Thread thread23(osPriorityNormal, 10 * 1024);
 
 
 void internet() 
 {
+    char  ssid[50],  psw[50]; 
+
+    server(ssid,psw);
+
+    ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
+    
+    NTPClient ntp(&esp);
+
+    //Store device IP
+    SocketAddress deviceIP;
+    //Store broker IP
+    SocketAddress MQTTBroker;
+
+    TCPSocket socket;
+
+    MQTTClient client(&socket);
+
    // thread23.start(callback(weather_retrieve_task));
 
-    printf("Hello from Mbed OS %d.%d", MBED_MAJOR_VERSION, MBED_MINOR_VERSION);
+    printf("Hello from Mbed OS %d.%d \n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION);
 
     printf("\nConnecting wifi..\n");
 
@@ -137,7 +150,11 @@ reconnect:
 
     reset_esp  = 1;
 
-    int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+printf("\n\nssid = %s, psw = %s\n\n",ssid,psw);
+
+
+    ThisThread::sleep_for(111111s);
+    int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
 
     if(rc != 0) 
     {

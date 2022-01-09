@@ -125,9 +125,6 @@ void publish_data (char * buffer,  MQTT::Message msg, MQTTClient client)
 
 
 
-
-
-
 void ntpGetTime(NTPClient ntp) 
 {
 
@@ -162,3 +159,6 @@ ntp_retry:
         printf("Current time is %s\r\n", ctime(&timestamp));
     }
 }
+
+
+

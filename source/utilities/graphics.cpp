@@ -34,7 +34,7 @@ ILI9486 tft(PAR_8, PortC, A3, D5, A2, A1, A0,
 
 void select( int selection)
 {
-    int x=98, y=90, dx=95,dy=115;
+    int x=90, y=85, dx=100,dy=120;
 
     static int prev = 0;
 
@@ -100,9 +100,9 @@ void init_graphics()
 
     tft.set_auto_up(1);
 
-    tft.fillrect (0, 0, 480, 90,BACKGROUND_TOP );
+    tft.fillrect (0, 0, 480, 75,BACKGROUND_TOP );
 
-    tft.fillrect(0, 90, 480, 320,BACKGROUND_BOT);
+    tft.fillrect(0, 75, 480, 320,BACKGROUND_BOT);
 
     tft.fillrect(20, 40, 460, 300,BACKGROUND_MAIN);
 
@@ -164,6 +164,18 @@ void menu_graphics()
 
     tft.fillrect(439, 165,450 , 185,White);
 
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+    tft.foreground(Blue);
+
+    tft.background( White);
+
+    tft.locate(190, 265 );
+
+    tft.printf("AQUA AG");
+        
+
+
 
 }
 
@@ -173,14 +185,6 @@ void program_graphics()
     tft.fillrect(36 , 51, 454, 289, PROGRAM_COLOR);
 
     tft.rect(35,50,455,290, Black);
-
-    tft.line(36 , 75,460, 75, Black);
-
-    tft.line(80, 50,80, 290, Black);
-
-    tft.line(160 , 50,160, 290, Black);
-
-    tft.line(230 , 50,230, 290, Black);
 
     tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
@@ -200,28 +204,52 @@ void program_graphics()
 
     tft.printf("DURATION");
 
+    tft.line(36 , 75,455, 75, Black);
+
+    tft.line(80, 50,80, 290, Black);
+
+    tft.line(165 , 50,165, 290, Black);
+
+    tft.line(230 , 50,230, 290, Black);
+
 }
 
 
+void manual_graphics()
+{
+    tft.fillrect( 70, 65, 280, 290, PROGRAM_COLOR);
+    
+    tft.background( White);
+
+    tft.foreground(Black);
+
+    tft.set_font((unsigned char *)Arial28x28);
+
+
+    tft.locate(300, 70);
+
+    tft.printf("manual");
+
+}
+
 void auto_graphics()
 {
-
-
+  
     int xa =50, ya = 60, xb =270 , yb =190, d =7 ;
 
-    tft.fillrect( xa, ya, xb,  yb,  DarkGrey);
+    tft.fillrect( xa, ya, xb,  yb,  AUTO_C1);
 
-    tft.fillrect( xa  , yb+d, xb, 270,  DarkCyan);
+    tft.fillrect( xa  , yb+d, xb, 270,  AUTO_C2);
 
-    tft.fillrect( xb+d, ya, 430,  yb,  DarkCyan);
+    tft.fillrect( xb+d, ya, 430,  yb,  AUTO_C3);
 
-    tft.fillrect( xb+d, yb+d, 430,  270,  DarkCyan);
+    tft.fillrect( xb+d, yb+d, 430,  270,  AUTO_C4);
 
     tft.Bitmap(300,205,40,50,(unsigned char *)image_data_temp_icon);
 
     tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-    tft.background( DarkCyan);
+    tft.background( AUTO_C2);
 
     tft.foreground( White);
 
@@ -241,8 +269,60 @@ void auto_graphics()
 
     tft.printf("Rain");
 
+    tft.background( AUTO_C3);
+
     tft.locate(290,70);
 
     tft.printf("Next Water");
 }
 
+void flow_graphics()
+{
+    tft.fillrect( 70, 65, 280, 290, PROGRAM_COLOR);
+    
+    tft.background( White);
+
+    tft.foreground(Black);
+
+    tft.set_font((unsigned char *)Arial28x28);
+
+
+    tft.locate(300, 70);
+
+    tft.printf("flow");
+
+}
+
+void rain_graphics()
+{
+    tft.fillrect( 70, 65, 280, 290, PROGRAM_COLOR);
+
+    tft.background( White);
+
+    tft.foreground(Black);
+
+    tft.set_font((unsigned char *)Arial28x28);
+
+    tft.locate(300, 70);
+
+    tft.printf("rain");
+
+}
+
+void water_budget_graphics()
+{
+    tft.fillrect( 100, 105, 350, 220, PROGRAM_COLOR);
+
+    tft.rect( 100, 105, 350, 220, Black);
+
+    tft.background( White);
+
+    tft.foreground(Black);
+
+    tft.set_font((unsigned char *)Arial28x28);
+    
+    tft.locate(90, 70);
+
+    tft.printf("Set Water Budget");
+
+}

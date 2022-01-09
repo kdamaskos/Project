@@ -2,7 +2,7 @@
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
 
-
+void init();
 
 void calculate_schedule(int program) ;
 

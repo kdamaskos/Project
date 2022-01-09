@@ -47,6 +47,15 @@
 
 #define BACKGROUND_C 0x03ef
 
+//auto boxes colors
+#define AUTO_C1 0xA535
+
+#define AUTO_C2 0x6D48
+
+#define AUTO_C3 0x943F
+
+#define AUTO_C4 0xD54E
+
 extern ILI9486 tft;
 
 
@@ -203,7 +212,7 @@ class CustomRect2
 
 class Programs
 {
-        int prev =0, x = 50, y=90, d=40;
+        int prev =0, x = 45, y=90, d=45;
 
     public:
 
@@ -222,15 +231,18 @@ class Programs
 
         void select (int program)
         {
-            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+            tft.set_font((unsigned char *)Arial28x28);
             tft.background( 0xF777);
-            tft.foreground(Black);
+            tft.foreground(0xAD75);
+            tft.locate(x, y + prev*d); 
+            tft.printf(" ");
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19); 
             tft.locate(x, y + prev*d); 
             tft.printf("%s",PROGRAM[prev]);  
 
             prev = program;
  
-           
+           tft.set_font((unsigned char *)Arial28x28);
             tft.background( Black);
             tft.foreground(White);
             tft.locate(x, y + program*d);
@@ -238,12 +250,21 @@ class Programs
 
 
         }
+        void clear_select(int program)
+        {
+            tft.set_font((unsigned char *)Arial28x28);
+            tft.background( 0xF777);
+            tft.foreground(Black);
+            tft.locate(x, y + prev*d); 
+            tft.printf("%s",PROGRAM[prev]);  
+
+        }
 };
 
 
  class Start 
  {
-        int  prev = 0, x = 85 , y = 120, d = 35 ;
+        int  prev = 0, x = 95 , y = 120, d = 35 ;
 
     public:
 
@@ -263,7 +284,7 @@ class Programs
                 }
                 else 
                 {
-                    tft.printf("   -");
+                    tft.printf(" -:- ");
                 }
                 
 
@@ -280,12 +301,12 @@ class Programs
 
             if (start_times[Start_no][1][program] != -1)
             {
-                tft.printf("%02d:%02d", start_times[Start_no][0][program],
+                tft.printf("%02d:%02d ", start_times[Start_no][0][program],
                                             start_times[Start_no][1][program]);                    
             }
             else 
             {
-                tft.printf("   -");
+                tft.printf(" -:- ");
             }
 
         }
@@ -306,7 +327,7 @@ class Programs
             }
             else 
             {
-                tft.printf("   -");
+                tft.printf(" -:- ");
             }
 
              prev =   Start_no;                                           
@@ -327,7 +348,7 @@ class Programs
             }
             else 
             {
-                tft.printf("   -");
+                tft.printf(" -:- ");
             }
 
         }
@@ -514,27 +535,28 @@ class Duration
 class Table 
 {
 
-    int x1, y1, x2, y2, nrow, ncol,color, cell_x, cell_y, prev = 0, length, col, row;
+    int x1, y1, x2, y2, nrow, ncol,color,color_table, cell_x, cell_y, prev = 0, length, col, row;
 
     public:
 
 
-    Table(int X1, int Y1, int X2, int Y2, int Nrow, int Ncol, unsigned int Color = Black, int Length = 40) {
+    Table(int X1, int Y1, int X2, int Y2, int Nrow, int Ncol,unsigned int Color_Table = PROGRAM_COLOR, unsigned int Color = Black,  int Length = 40) 
+    {
 
-        x1=X1, y1=Y1, x2=X2, y2=Y2, nrow=Nrow, ncol=Ncol,color=Color;
+        x1=X1, y1=Y1, x2=X2, y2=Y2, nrow=Nrow, ncol=Ncol,color=Color,color_table =Color_Table;
         cell_x = (x2-x1)/ncol;
         cell_y = (y2-y1)/nrow;
         length = Length;
 
     }
 
-
         void draw()
         {
 
+            tft.background(color_table); 
 
-            tft.background(PROGRAM_COLOR); 
             tft.foreground( Black); 
+
             tft.set_font((unsigned char *)Terminal6x8);
 
             int i =0;
@@ -565,37 +587,43 @@ class Table
      
         }
 
-
         void populate(int *Data = NULL)
         {
-           tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
             tft.foreground( Black); 
-            tft.background( White); 
+
+            tft.background( color_table); 
 
             int i= 0;
+
             for (int col=0; col< ncol; col++) 
             {
 
                 for (int row=0; row< 8; row++) 
                 {
 
-                    tft.locate(col*cell_x+x1+8, 8+y1+row*cell_y); 
+                    tft.locate( (i/nrow) *cell_x+x1+8, y1+8+ (i%nrow) *cell_y); 
 
-                    tft.locate( (i/nrow) *cell_x+x1+6, y1+6+ (i%nrow) *cell_y); 
                     tft.printf("%d",Data[i]);
-                    i++;
 
-                    
+                    i++;
+  
                 }
             }           
         }
+
         void clear_select (int cell, int  *Data = NULL)
         {
 
             tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
             tft.foreground( Black); 
-            tft.background( White); 
-            tft.locate( (cell/nrow) *cell_x+x1+6, y1+6+ ( cell%nrow) *cell_y); 
+
+            tft.background( color_table); 
+
+            tft.locate( (cell/nrow) *cell_x+x1+8, y1+8+ ( cell%nrow) *cell_y); 
+
             tft.printf("%d", Data[cell]);
             
         }
@@ -608,8 +636,11 @@ class Table
             tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
             tft.foreground( White); 
+
             tft.background( Black); 
-            tft.locate( (cell/nrow) *cell_x+x1+6, y1+6+ (cell%nrow) *cell_y); 
+
+            tft.locate( (cell/nrow) *cell_x+x1+8, y1+8+ (cell%nrow) *cell_y); 
+
             tft.printf("%d", Data[cell]);
 
             prev = cell;
@@ -623,7 +654,7 @@ class Table
 
             tft.foreground(White); 
             tft.background(Black); 
-            tft.locate( (cell/nrow) *cell_x+x1+6, y1+6+ (cell%nrow) *cell_y); 
+            tft.locate( (cell/nrow) *cell_x+x1+8, y1+8+ (cell%nrow) *cell_y); 
             tft.printf("%d",Data[cell]);
 
         }
@@ -640,7 +671,13 @@ void program_graphics();
 
 void auto_graphics();
 
+void manual_graphics();
 
+void water_budget_graphics();
+
+void rain_graphics();
+
+void flow_graphics();
 
 
 #endif

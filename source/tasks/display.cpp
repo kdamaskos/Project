@@ -74,15 +74,15 @@ void display()
 
     Duration duration;
 
-    Table duration_table(230,75, 455,293, 8, 5);
+    Table duration_table(230,75, 455,291, 8, 5);
 
-    Table flow_table( 70, 65, 280, 290, 8, 5, Black);
+    Table flow_table( 70, 65, 280, 290, 8, 5);
     
-    Table rain_table( 70, 65, 280, 290, 8, 5, Black);
+    Table rain_table( 70, 65, 280, 290, 8, 5);
 
-    Table manualTable( 70, 65, 280, 290, 8, 5, Black);
+    Table manualTable( 70, 65, 280, 290, 8, 5);
 
-    CustomRect2 submenu_icons(40, 70, 120,90, 20,  Green, White, 3,20);
+    CustomRect2 submenu_icons(40, 70, 120,90, 20,  0x4AF1, White, 3,20);
 
     menu = MENU;
 
@@ -111,7 +111,6 @@ void display()
             refresh_date = false;
         }
         
-
         switch (menu) 
         {
             
@@ -162,6 +161,12 @@ void display()
 
                         event_flag.wait_any(REFRESH_DISPLAY); 
 
+                        
+                        if (previous_programs_submenu != programs_submenu)
+                        {
+                            programs.clear_select( program);
+                        }
+
                         break; 
                     }
 
@@ -170,6 +175,8 @@ void display()
                         if(previous_programs_submenu != programs_submenu)
                         {
                             previous_programs_submenu = STARTS;
+
+                            rotary_pressed_count = 0;
 
                             rotary_rotated = true;
                         }
@@ -366,43 +373,47 @@ void display()
                 else
                 {
 
-                    tft.fillrect( 50, 60, 270,  190,  DarkGrey);
+                    tft.fillrect( 50, 60, 270,  190,  AUTO_C1);
 
-                }
+                    int ret = calculate_next_water(&next_water_hour, &next_water_min, &next_water_day, &next_water_program );
 
-                int ret = calculate_next_water(&next_water_hour, &next_water_min, &next_water_day, &next_water_program );
-                    
-                if (ret) 
-                {
-                    tft.set_font((unsigned char *)Arial24x23);
-                    
-                    tft.locate(330,95);
+                    tft.background( AUTO_C3);
 
-                    tft.printf("%s",WEEK_DAY[next_water_day]);
+                    tft.foreground( White);
 
-                    tft.locate(315,120);
+                    if (ret) 
+                    {
+                        tft.set_font((unsigned char *)Arial24x23);
 
-                    tft.set_font((unsigned char *)Arial28x28);
+                        tft.locate(330,95);
 
-                    tft.printf("%02d:%02d",next_water_hour,next_water_min);
+                        tft.printf("%s",WEEK_DAY[next_water_day]);
 
-                    tft.locate(300,155);
+                        tft.locate(315,120);
 
-                    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+                        tft.set_font((unsigned char *)Arial28x28);
 
-                    tft.printf("Program %s",PROGRAM[next_water_program]);
+                        tft.printf("%02d:%02d",next_water_hour,next_water_min);
 
-                }
-                else
-                {
+                        tft.locate(300,155);
 
-                    tft.fillrect( 277, 60, 430, 190,  DarkCyan);
+                        tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
-                    
-                    tft.locate(280,110);
+                        tft.printf("Program %s",PROGRAM[next_water_program]);
 
-                    tft.printf("No Programed");
+                    }
+                    else
+                    {
+
+                        tft.fillrect( 277, 90, 430, 190,  AUTO_C3);
+
+                        tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+                        tft.locate(330,110);
+
+                        tft.printf("None");
+                    }
+
                 }
 
                 if (rain_refresh)
@@ -412,7 +423,7 @@ void display()
 
                             tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                            tft.background( DarkCyan);
+                            tft.background( AUTO_C2);
 
                             tft.foreground( Green);
 
@@ -426,7 +437,7 @@ void display()
 
                             tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                            tft.background( DarkCyan);
+                            tft.background( AUTO_C2);
 
                             tft.foreground( Red);
 
@@ -445,7 +456,7 @@ void display()
                     
                     tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                    tft.background( DarkCyan);
+                    tft.background( AUTO_C4);
 
                     tft.foreground( White);
 
@@ -468,7 +479,7 @@ void display()
                 {
                     tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                    tft.background( DarkCyan);
+                    tft.background( AUTO_C2);
 
                     tft.foreground( White);
 
@@ -492,6 +503,8 @@ void display()
                 {
                     previous_menu = MANUAL;
 
+                    manual_graphics();
+
                     rotary_rotated = true;
 
                     rotary_pressed = true;
@@ -500,7 +513,6 @@ void display()
            
                     manualTable.populate((int *) manual_valves);
 
-                    first_time_1 = false;
 
                 }
 
@@ -600,6 +612,8 @@ void display()
 
                             previous_options_submenu = FLOW;
 
+                            flow_graphics();
+
                             rotary_rotated = true;
 
                             rotary_pressed = true;
@@ -640,6 +654,8 @@ void display()
 
                             previous_options_submenu = RAIN_SENSOR;
 
+                            rain_graphics();
+
                             rotary_rotated = true;
 
                             rotary_pressed = true;
@@ -647,8 +663,6 @@ void display()
                             rain_table.draw();
                     
                             rain_table.populate((int *) rain);
-
-                            first_time_1 = false;
 
                         }
 
@@ -681,21 +695,23 @@ void display()
 
                             previous_options_submenu = WATER_BUDGET;
 
-                            tft.fillrect(100, 100, 300, 200,PROGRAM_COLOR);
-
-                            first_time_1 = false;
+                            water_budget_graphics();
 
                         }
 
-                        tft.background( BACKGROUND_TOP);
+                        tft.background( PROGRAM_COLOR);
 
-                        tft.foreground(BACKGROUND_BOT);
+                        tft.foreground(Black);
 
                         tft.set_font((unsigned char *)Arial28x28);
 
-                        tft.locate(150, 150);
+                        tft.locate(200, 150);
 
-                        tft.printf("%d %%",water_budget);
+                        tft.printf("%d  ",water_budget);
+
+                        tft.locate(250, 150);
+
+                        tft.printf("%%");
 
                         event_flag.wait_any(REFRESH_DISPLAY);
 

@@ -3,6 +3,6 @@
 
 void internet() ;
 
-#define MBED_CONF_APP_MQTT_BROKER_PORT
+
 
 #endif

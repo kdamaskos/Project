@@ -359,7 +359,7 @@ bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next
                 if ( week_days[next_day][i] && k == 0)
                 {
                     
-                    if ( start_times[j][0][i] < *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][0][i] > t->tm_hour ) 
+                    if ( start_times[j][0][i] < *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][0][i] >= t->tm_hour ) 
                     {      
                         
                         *next_water_hour = start_times[j][0][i];
@@ -437,6 +437,22 @@ bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next
         
 
 
+void init(){
 
+     
+    // initialize
+    for (int i = 0; i < TOTAL_ZONES; i++) {
+        rain[i] = 1;
+        flow[i] = 5;
+    }
+
+    for (int j = 0; j < TOTAL_PROGRAMS; j++) {
+        for (int i = 0; i < TOTAL_STARTS; i++) {
+        start_times[i][1][j] = -1;
+        }
+    }
+
+
+}
 
 
