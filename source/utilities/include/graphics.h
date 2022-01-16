@@ -68,6 +68,7 @@ void select( int selection);
 
 void update_date_time();
 
+void update_wifi_icon(bool is_connected);
 
 class CustomRect2
 {

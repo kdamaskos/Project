@@ -50,7 +50,7 @@ DigitalInOut power_esp(PA_11);
 
 //b72bf77dd82cb3ff9a431a86b59c42c6
 
-
+bool is_connected;
 
 
 #define BUFFER_SIZE  600
@@ -123,7 +123,7 @@ void internet()
 {
     char  ssid[50],  psw[50]; 
 
-    server(ssid,psw);
+   // server(ssid,psw);
 
     ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
     
@@ -150,17 +150,16 @@ reconnect:
 
     reset_esp  = 1;
 
-printf("\n\nssid = %s, psw = %s\n\n",ssid,psw);
-
-
-    ThisThread::sleep_for(111111s);
-    int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+    //int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+    int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
 
     if(rc != 0) 
     {
         printf("\nConnection error %d\n",rc);
         
         reset_esp  = 0;
+
+        is_connected = false;
 
         ThisThread::sleep_for(2s);
 
@@ -172,15 +171,19 @@ printf("\n\nssid = %s, psw = %s\n\n",ssid,psw);
         esp.get_ip_address(&deviceIP);
 
         printf("IP via DHCP: %s\n", deviceIP.get_ip_address());
+
+        is_connected = true;
     }
 
-    ntpGetTime(ntp);
+   ntpGetTime(ntp);
 
     // Use with DNS
     rc =  esp.gethostbyname("test.mosquitto.org", &MQTTBroker, NSAPI_IPv4,"esp");
 
     if (rc != 0)
     {
+        is_connected = false;
+        
         printf("Get hostanme error %d\n", rc);
 
         esp.disconnect();
@@ -230,7 +233,7 @@ printf("\n\nssid = %s, psw = %s\n\n",ssid,psw);
     }
 
 
-   if ((rc = client.subscribe("controller1/newValves", MQTT::QOS1,
+    if ((rc = client.subscribe("controller1/valves", MQTT::QOS1,
                              messageArrived)) != 0) 
     {
 
@@ -276,6 +279,7 @@ printf("\n\nssid = %s, psw = %s\n\n",ssid,psw);
 
         if (rc < 0) 
         {
+            is_connected = false;
 
             printf("rc from yield is %d\r\n", rc);
 

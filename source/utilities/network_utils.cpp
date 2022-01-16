@@ -17,7 +17,7 @@ void messageArrived(MQTT::MessageData &md)
 
     MQTT::Message &message = md.message;
   
-    printf("Message arrived: qos %d, retained %d, dup %d, packetid %d\r\n",
+    printf("\nMessage arrived: qos %d, retained %d, dup %d, packetid %d\r\n",
     message.qos, message.retained, message.dup, message.id);
 
     printf("Payload %.*s\r\n", message.payloadlen, (char *)message.payload);
@@ -28,7 +28,7 @@ void messageArrived(MQTT::MessageData &md)
     {
         deserialize(ret);
 
-        refresh_internet = 1;
+        
     }
   /*
   if (reset > 0 && ret[0] == 'u') {

@@ -67,8 +67,35 @@ void select( int selection)
 
 }
 
-void online_symbol()
+
+
+void update_wifi_icon(bool is_connected)
 {
+
+    tft.background( BACKGROUND_TOP);
+    
+    tft.foreground(BACKGROUND_BOT);
+    
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+    
+    tft.locate(60, 10);
+
+    if (is_connected)
+    {
+        tft.printf("ssid");
+
+        tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi);
+
+    }
+    else
+    {
+
+        tft.printf("    ");
+
+        tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi_not);
+
+
+    }
 
 }
 

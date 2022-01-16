@@ -63,10 +63,6 @@ extern  volatile int select_menu;
 extern  volatile int select_submenu;
 
 
-extern volatile int refresh_date;
-extern  volatile int refresh_internet;
-
-
 extern  bool refresh_display, publish_valves, publish_starts, publish_days, publish_manual; 
 
 

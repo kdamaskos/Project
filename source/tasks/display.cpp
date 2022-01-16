@@ -5,6 +5,8 @@
 
 #include <utilities/include/general.h>
 
+#include <network.h>
+
 #include "mbed.h"
 
 #include "string"
@@ -21,8 +23,11 @@
 
 #include "icons/water_drop.h"
 
+bool refresh_date = true, refresh_wifi_icon = true ;
+
 
 Thread thread(osPriorityNormal);
+
 
 
 void live_info_task()
@@ -31,7 +36,7 @@ void live_info_task()
 
     struct tm *t;
 
-    int prev_hour = 0, prev_min = 0;
+    int prev_hour = 0, prev_min = 0, prev_wifi= false;
 
     while(1)
     {
@@ -48,6 +53,16 @@ void live_info_task()
 
             refresh_date = true;
  
+            event_flag.set(REFRESH_DISPLAY);
+
+        }
+
+        if(prev_wifi != is_connected)
+        {
+            refresh_wifi_icon = true;
+
+            prev_wifi = is_connected;
+
             event_flag.set(REFRESH_DISPLAY);
 
         }
@@ -86,21 +101,7 @@ void display()
 
     menu = MENU;
 
-    refresh_date = true;
-
     thread.start(callback(live_info_task));
-
-    tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi);
-
-    tft.background( BACKGROUND_TOP);
-
-    tft.foreground(BACKGROUND_BOT);
-
-    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
-
-    tft.locate(60, 10);
-
-    tft.printf("-30db");
 
     while (1) 
     {
@@ -109,6 +110,13 @@ void display()
             update_date_time();  
 
             refresh_date = false;
+        }
+
+        if (refresh_wifi_icon)
+        {
+            update_wifi_icon(is_connected);  
+
+            refresh_wifi_icon = false;
         }
         
         switch (menu) 
@@ -320,8 +328,6 @@ void display()
 
                     tft.printf("Watering");
 
-                    tft.Bitmap(200,100,40,74,(unsigned char *)image_data_water_drop);
-
                     int count = 0;
 
                     int waterring_valves[MAXVALVES];
@@ -344,29 +350,18 @@ void display()
     
                     }
 
-                    int shift = 0;
-
-                    tft.locate(55+shift, 120);
+                    tft.locate(55, 120);
 
                     tft.printf("          ");
+
+                    tft.locate(70, 120);
 
                     // print valves which is watering
                     for (int i = 0; i < count; i++) 
                     {
 
-                        tft.locate(70+ + shift, 120);
-
-                        if ( waterring_valves[i] <0) 
-                        {
-                            tft.printf("*");
-                        }
-                        else
-                        {
-                            tft.printf("%d ", waterring_valves[i] + 1);
-                        }
-
-                        shift+=30;
-
+                        tft.printf("%d ", waterring_valves[i] + 1);
+                        
                     }
 
                 } 

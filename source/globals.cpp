@@ -12,8 +12,6 @@ volatile int select_menu;
 volatile int select_submenu;
  
 
-volatile int refresh_date;
-volatile int refresh_internet;
 
 bool refresh_display, publish_valves, publish_starts, publish_days, publish_manual; 
 
