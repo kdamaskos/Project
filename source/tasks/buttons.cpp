@@ -145,6 +145,8 @@ void buttons()
 
                     case AUTO:
 
+                        is_watering = false;
+
                         menu = MENU;
 
                         break;
@@ -227,6 +229,8 @@ void buttons()
                             case AUTO:
 
                                 menu = AUTO;
+
+                                refresh_watering_valves = true;
 
                                 break;
 

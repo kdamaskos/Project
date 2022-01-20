@@ -18,13 +18,16 @@
 *
 */
 
-void serialize(int topic, char *buffer) {
-  int i, j;
-  char temp[15];
-  sprintf(buffer, "u");
+void serialize(int topic, char *buffer) 
+{
+    int i, j;
 
-  switch (topic) {
-  case 0:
+    char temp[15];
+
+    sprintf(buffer, "u");
+
+    switch (topic) {
+    case 0:
     strcat(buffer, "{\"v\":[");
     for (i = 0; i < TOTAL_ZONES; i++) {
       sprintf(temp, "%d,%d,%d,", durations[i][1], durations[i][2], rain[i]);
@@ -70,90 +73,115 @@ void serialize(int topic, char *buffer) {
 }
 
 // parsing json values in according variables
-void deserialize(char *ret) {
+void deserialize(char *ret, int ln ) 
+{
 
-  int x, i, j, temp;
+    int x, i, j, temp;
 
-  //internet_mutex.lock();
-  if (ret[2] == 'v') { // set up valves json
-    ret = strchr(ret, '[');
-    for (i = 0; i < TOTAL_ZONES; i++) {
+    int program;
 
-      ret = ret + 1;
-      temp = atoi(ret);
-      ret = strchr(ret, ',');
-      if (temp > -1) {
 
-        durations[i][1] = temp;
-        ret = ret + 1;
-        temp = atoi(ret);
+    //internet_mutex.lock();
+    if (ret[2] == 'v') 
+    { // set up valves json
 
-        if (temp > -1) {
+        ret = strchr(ret, '[');
 
-          durations[i][2] = temp;
+        for (i = 0; i < TOTAL_ZONES; i++) 
+        {
+
+            ret = strchr(ret+1, '[');
+            
+            program = atoi(ret+1); 
+
+            ret = strchr(ret, ',');
+
+            durations[i][program] = atoi(ret+1);
+
+            ret = strchr(ret+1, ',');
+
+            rain[i] = atoi(ret+1);
+
         }
-      }
-      ret = strchr(ret, ',');
-      ret = ret + 1;
-      temp = atoi(ret);
-      if (temp > -1) {
-        rain[i] = temp;
-      }
-    }
-    publish_valves = true;
-  } else if (ret[2] == 's') {
 
-    for (i = 0; i < TOTAL_STARTS; i++) { // start times json
-      ret = strchr(ret, '[');
+    } 
+    else if (ret[2] == 's') 
+    {
+        ret = strchr(ret, '[');
 
-      for (j = 0; j < TOTAL_PROGRAMS; j++) {
-        ret = ret + 1;
-        temp = atoi(ret);
-        if (temp > -1) {
-          start_times[i][0][j] = temp;
+        for (j = 0; j < TOTAL_PROGRAMS; j++) 
+        { // start times json
+       
+            for (i = 0; i < TOTAL_STARTS; i++) 
+            {
+                ret = strchr(ret, '"');
+
+                start_times[i][0][j] = atoi(ret+1);
+            
+                ret = strchr(ret, ':');
+
+                start_times[i][1][j] = atoi(ret+1);
+                
+                ret = strchr(ret, ',');
+            }
         }
-        ret = strchr(ret, ',');
-        ret = ret + 1;
-        temp = atoi(ret);
-        if (temp > -1) {
-          start_times[i][1][j] = temp;
+
+        ret = strchr(ret, '"');
+
+        water_budget = atoi(ret + 1);
+
+    } 
+    else if (ret[2] == 'd') 
+    { // days json
+
+        ret = strchr(ret, '[') + 1;
+
+        for (i = 0; i < TOTAL_PROGRAMS; i++) 
+        {
+            ret = strchr(ret, '[') + 1;
+
+            for (j = 0; j < 7; j++) 
+            {
+
+                week_days[j][i] = atoi(ret);
+             
+                ret = strchr(ret, ',') + 1;
+            }
         }
-        ret = strchr(ret, ',');
-      }
-    }
-    ret = strchr(ret, 'w');
-    ret = strchr(ret, '[');
-    water_budget = atoi(ret + 1);
-    publish_starts = true;
-  } else if (ret[2] == 'd') { // days json
+        
+    } 
+    else if (ret[2] == 'm') 
+    { // manual json
 
-    for (i = 0; i < TOTAL_PROGRAMS; i++) {
-      ret = strchr(ret, '[');
-      for (j = 0; j < 7; j++) {
-        ret = ret + 1;
-        temp = atoi(ret);
-        if (temp > -1) {
-          week_days[j][i] = temp;
-          ret = strchr(ret, ',');
+        ret = strchr(ret, '[') + 3;
+
+        for (i = 0; i < TOTAL_ZONES; i++) 
+        {
+            
+            manual_valves[i] = atoi(ret);
+
+            ret = strchr(ret, '[') + 2;
         }
-      }
-    }
-    publish_days = true;
-  } else if (ret[2] == 'm') { // manual json
 
-    ret = strchr(ret, '[');
-    temp = atoi(ret + 1);
+        ret = strchr(ret, '"');
 
-    if (temp) {
-      for (i = 0; i < TOTAL_ZONES; i++) {
-        ret = strchr(ret, ',');
-        ret = ret + 1;
-        manual_valves[i] = atoi(ret);
-      }
-      // menu = MANUAL;
-    } else {
-      // menu = AUTO;
+        if (ret[1])
+        {
+            menu = MANUAL;
+
+        }
+        else 
+        {
+            menu = AUTO;
+        }
+
     }
-  }
+
+    programs_submenu = SELECT_PROGRAM;
+    
+    event_flag.set(REFRESH_DISPLAY);
+
+    
+
  // internet_mutex.unlock();
 }

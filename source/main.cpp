@@ -5,6 +5,8 @@
 
 #include "tasks/include/display.h"
 
+#include "tasks/include/sensors_task.h"
+
 #include "tasks/include/network.h"
 
 #include "tasks/include/valves_control.h"
@@ -20,7 +22,9 @@ Thread thread2(osPriorityNormal);
 
 Thread thread3(osPriorityNormal);
 
-Thread thread4(osPriorityNormal+1);
+Thread thread4(osPriorityNormal+15);
+
+Thread thread5(osPriorityNormal+10);
 
 
 int main() 
@@ -37,6 +41,8 @@ int main()
     thread3.start(callback(buttons));
 
     thread4.start(callback(valves_control));
+
+    thread5.start(callback(sensors_task));
   
 
     while (1) 

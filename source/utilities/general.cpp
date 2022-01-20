@@ -137,7 +137,15 @@ void calculate_schedule(int program )
 
     } while (valves_count != 0);
 
-    program_duration[program] = (j-1);
+    water_duration.total = (j-1)*INTERVAL_TIME;
+
+    water_duration.sec = 0;
+
+    water_duration.min = water_duration.total % 60;
+
+    water_duration.hour = water_duration.total / 60;
+
+
 /*
     for (int i=0; i<TOTAL_ZONES; i++)
     {

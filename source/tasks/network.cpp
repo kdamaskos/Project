@@ -151,7 +151,8 @@ reconnect:
     reset_esp  = 1;
 
     //int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-    int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+    //int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+    int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
 
     if(rc != 0) 
     {
@@ -233,7 +234,7 @@ reconnect:
     }
 
 
-    if ((rc = client.subscribe("controller1/valves", MQTT::QOS1,
+    if ((rc = client.subscribe("controller1/valves", MQTT::QOS0,
                              messageArrived)) != 0) 
     {
 
@@ -242,15 +243,9 @@ reconnect:
        
     }
 
-    if ((rc = client.subscribe("controller1/start_times", MQTT::QOS1,
-                             messageArrived)) != 0) 
-    {
 
-        printf("rc from start_times subscribe is %d\r\n", rc);
 
-    }
-
-    if ((rc = client.subscribe("controller1/days", MQTT::QOS1, messageArrived)) !=
+    if ((rc = client.subscribe("controller1/days", MQTT::QOS0, messageArrived)) !=
       0) 
     {
         printf("rc from days subscribe is %d\r\n", rc);
@@ -258,10 +253,22 @@ reconnect:
     
     }
 
-    if ((rc = client.subscribe("controller1/manual", MQTT::QOS1,
+
+
+    if ((rc = client.subscribe("controller1/manual", MQTT::QOS0,
                              messageArrived)) != 0) 
     {
         printf("rc from manual subscribe is %d\r\n", rc);
+
+    }
+
+
+    
+    if ((rc = client.subscribe("controller1/start_times", MQTT::QOS0,
+                             messageArrived)) != 0) 
+    {
+
+        printf("rc from start_times subscribe is %d\r\n", rc);
 
     }
 

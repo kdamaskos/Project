@@ -47,6 +47,8 @@ void valves_control()
                             {
                                 watering_program = j;
 
+                                refresh_watering_valves = true;
+
                                 is_watering = true;
 
                                 start_time = time(NULL);    
@@ -66,8 +68,12 @@ void valves_control()
                 else 
                 {
                     current_time = time(NULL);
+
+                    event_flag.set(REFRESH_DISPLAY);
+
+                    refresh_elapsed_time = true;
                     
-                    if (current_time > program_duration[watering_program]*60* water_budget / 100 + start_time)
+                    if (current_time > water_duration.total*60* water_budget / 100 + start_time)
                     {
                         for (int i = 0; i < TOTAL_STARTS; i++)
                         {
@@ -77,6 +83,8 @@ void valves_control()
                         time_shift = 0;
 
                         is_watering = false;
+
+                        refresh_watering_valves = true;
 
                         event_flag.set(REFRESH_DISPLAY);
                     }
@@ -102,14 +110,17 @@ void valves_control()
 
                         }
 
-                        event_flag.set(REFRESH_DISPLAY);
+                        refresh_watering_valves = true;
 
                         time_shift ++;
 
                     }
+
+
                 }
 
                 ThisThread::sleep_for(1s);
+
 
                 break;
             }

@@ -63,7 +63,7 @@ extern  volatile int select_menu;
 extern  volatile int select_submenu;
 
 
-extern  bool refresh_display, publish_valves, publish_starts, publish_days, publish_manual; 
+extern  bool refresh_display,refresh_elapsed_time,refresh_watering_valves, publish_valves, publish_starts, publish_days, publish_manual; 
 
 
 extern  volatile int durations[TOTAL_ZONES][TOTAL_PROGRAMS]; // valvei = {x,duration,program} x is used to auto run 
@@ -73,7 +73,8 @@ extern  volatile int rain[TOTAL_ZONES];
 extern  volatile int flow[TOTAL_ZONES];
 extern  volatile int manual_valves[TOTAL_ZONES]; //for manual control
 extern  volatile int auto_valves[TOTAL_ZONES]; // schedule for auto run for each time interval
-extern   int program_duration[TOTAL_PROGRAMS];
+
+extern   int total_duration;
 extern  volatile int duration_remain[TOTAL_ZONES];
 
 
@@ -112,5 +113,22 @@ extern bool rain_refresh;
 extern bool flow_refresh;
 
 extern bool temp_refresh;
+
+
+
+
+struct program_duration
+{
+    int total;
+    int sec;
+    int min;
+   int hour;
+
+};
+
+
+extern struct program_duration water_duration;
+
+
 
 #endif

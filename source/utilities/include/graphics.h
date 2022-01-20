@@ -50,9 +50,9 @@
 //auto boxes colors
 #define AUTO_C1 0xA535
 
-#define AUTO_C2 0x6D48
+#define AUTO_C2 0x1A37
 
-#define AUTO_C3 0x943F
+#define AUTO_C3 0x31EC
 
 #define AUTO_C4 0xD54E
 

@@ -13,7 +13,7 @@ volatile int select_submenu;
  
 
 
-bool refresh_display, publish_valves, publish_starts, publish_days, publish_manual; 
+bool refresh_elapsed_time,refresh_watering_valves,refresh_display, publish_valves, publish_starts, publish_days, publish_manual; 
 
   volatile int durations[TOTAL_ZONES][TOTAL_PROGRAMS]; // valvei = {x,duration,program} x is used to auto run 
   volatile int start_times[TOTAL_STARTS][2][TOTAL_PROGRAMS]; 
@@ -26,7 +26,8 @@ bool refresh_display, publish_valves, publish_starts, publish_days, publish_manu
  
 struct schedule schedule[TOTAL_ZONES][TOTAL_PROGRAMS];
 
-int program_duration[TOTAL_PROGRAMS];
+
+
 
   volatile int cycle; //each start time
   volatile int valve; 
@@ -51,8 +52,10 @@ int program_duration[TOTAL_PROGRAMS];
   volatile int warning;
 
 
-  bool rain_refresh;
+bool rain_refresh;
 
 bool flow_refresh;
 
 bool temp_refresh;
+
+struct program_duration water_duration;

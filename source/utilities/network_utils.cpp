@@ -16,17 +16,19 @@ void messageArrived(MQTT::MessageData &md)
     ++arrivedcount;
 
     MQTT::Message &message = md.message;
-  
+  /*
     printf("\nMessage arrived: qos %d, retained %d, dup %d, packetid %d\r\n",
     message.qos, message.retained, message.dup, message.id);
+*/
+    printf("size %d  \r\n", message.payloadlen);
 
-    printf("Payload %.*s\r\n", message.payloadlen, (char *)message.payload);
+    printf("  %.*s\r\n", message.payloadlen, (char *)message.payload);
   
     char *ret = (char *)message.payload;
 
     if (ret[0] == '{') 
     {
-        deserialize(ret);
+        deserialize(ret,message.payloadlen);
 
         
     }
@@ -43,48 +45,6 @@ void messageArrived(MQTT::MessageData &md)
 }
 
 
-
-int subscribe_channels(MQTTClient client)
-{
-    int rc;
-
-    if ((rc = client.subscribe("controller1/newValves", MQTT::QOS1,
-                             messageArrived)) != 0) 
-    {
-
-        printf("rc from valves subscribe is %d\r\n", rc);
-
-        return rc;
-    }
-
-
-    if ((rc = client.subscribe("controller1/start_times", MQTT::QOS1,
-                             messageArrived)) != 0) 
-    {
-
-        printf("rc from start_times subscribe is %d\r\n", rc);
-
-        return rc;
-    }
-
-    if ((rc = client.subscribe("controller1/days", MQTT::QOS1, messageArrived)) !=
-      0) 
-    {
-        printf("rc from days subscribe is %d\r\n", rc);
-
-        return rc;
-    }
-
-    if ((rc = client.subscribe("controller1/manual", MQTT::QOS1,
-                             messageArrived)) != 0) 
-    {
-        printf("rc from manual subscribe is %d\r\n", rc);
-
-        return rc;
-    }
-
-    return rc;
-}
 
 void publish_data (char * buffer,  MQTT::Message msg, MQTTClient client)
 {

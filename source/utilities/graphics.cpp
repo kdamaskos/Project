@@ -280,27 +280,16 @@ void auto_graphics()
 
     tft.foreground( White);
 
-    tft.locate(55,200);
-
-    tft.printf("Budget");
-
-    tft.locate(65,230);
-
-    tft.printf("%d%%",water_budget);
-
-    tft.locate(145,200);
+    tft.locate(80,200);
 
     tft.printf("Flow");
 
-    tft.locate(210,200);
+    tft.locate(180,200);
 
     tft.printf("Rain");
 
     tft.background( AUTO_C3);
 
-    tft.locate(290,70);
-
-    tft.printf("Next Water");
 }
 
 void flow_graphics()

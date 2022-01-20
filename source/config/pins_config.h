@@ -21,7 +21,9 @@
 //display
 
 
-#define RAIN_SENSOR_PIN PA_3
+#define RAIN_SENSOR_PIN PB_3
+
+#define FLOW_SENSOR_PIN PB_5
 
 
 
