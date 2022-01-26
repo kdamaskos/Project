@@ -2,6 +2,7 @@
 #include "globals.h"
 
 #include "mbed.h"
+#include <cstring>
 
 
 
@@ -176,12 +177,36 @@ void deserialize(char *ret, int ln )
         }
 
     }
+    else if (ret[2] == 't') 
+    {
 
-    programs_submenu = SELECT_PROGRAM;
-    
-    event_flag.set(REFRESH_DISPLAY);
+        ret = strchr(ret, ':') + 1;
 
-    
+        temperature = atoi(ret) - 273;
+
+        ret = strchr(ret+1, ':') + 1;
+
+        humidity = atoi(ret);
+
+        ret = strchr(ret+1, ':');
+
+        ret = strchr(ret, '"')+1;
+
+        int i =0;
+
+        while(ret[i] != '"')
+        {
+            weather[i] = ret[i];
+
+            i++;
+        }
+
+        weather[i] = NULL;
+
+        weather_refresh = true;
+
+    }
+
 
  // internet_mutex.unlock();
 }

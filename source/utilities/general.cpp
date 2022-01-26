@@ -345,6 +345,8 @@ bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next
 
     *next_water_minute = 60;
 
+    int next_water_minute_2 = 60;
+
     time_t seconds = time(NULL);
 
     struct tm *t = localtime(&seconds);
@@ -366,9 +368,24 @@ bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next
                 // if water today
                 if ( week_days[next_day][i] && k == 0)
                 {
-                    
-                    if ( start_times[j][0][i] < *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][0][i] >= t->tm_hour ) 
-                    {      
+                    if( start_times[j][0][i] == t->tm_hour && start_times[j][1][i] < next_water_minute_2 && start_times[j][1][i] > t->tm_min  )
+                    {
+                        
+                        next_water_minute_2 = start_times[j][1][i];
+
+                        *next_water_hour = start_times[j][0][i];
+
+                        *next_water_minute = start_times[j][1][i];
+
+                        *next_water_day = t->tm_wday;
+
+                        *next_water_program = i;
+
+                    }
+                    else if ( (start_times[j][0][i] < *next_water_hour &&  start_times[j][0][i] > t->tm_hour ) ||
+                    ( start_times[j][0][i] == *next_water_hour &&  start_times[j][1][i] < *next_water_minute  &&  start_times[j][0][i] > t->tm_hour)  ) 
+                    {     
+
                         
                         *next_water_hour = start_times[j][0][i];
 
@@ -379,24 +396,13 @@ bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next
                         *next_water_program = i;
                     
                     }
-                    else if(  start_times[j][0][i] == *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][1][i] < *next_water_minute &&  start_times[j][1][i] > t->tm_min) 
-                    {
-
-                        *next_water_hour = start_times[j][0][i];
-
-                        *next_water_minute = start_times[j][1][i];
-
-                        *next_water_day = t->tm_wday;
-
-                        *next_water_program = i;
-
-                    }
-
+   
                 }// if water next day
                 else if( week_days[next_day][i] )
                 {
                                         
-                    if ( start_times[j][0][i] < *next_water_hour &&  start_times[j][1][i] > -1  ) 
+                    if ( (start_times[j][0][i] < *next_water_hour) || 
+                    (start_times[j][0][i] == *next_water_hour && start_times[j][1][i] < *next_water_minute)) 
                     {      
                         
                         *next_water_hour = start_times[j][0][i];
@@ -408,25 +414,15 @@ bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next
                         *next_water_program = i;
                     
                     }
-                    else if(  start_times[j][0][i] == *next_water_hour &&  start_times[j][1][i] > -1 &&  start_times[j][1][i] < *next_water_minute )
-                    {
 
-                        *next_water_hour = start_times[j][0][i];
-
-                        *next_water_minute = start_times[j][1][i];
-
-                        *next_water_day = next_day;
-
-                        *next_water_program = i;
-
-                    }
                 }
 
             }
-        }
 
+        }
+        
         if ( *next_water_hour != 24)
-        {
+        {           
             return true;
         }
 

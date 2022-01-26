@@ -30,18 +30,13 @@ void messageArrived(MQTT::MessageData &md)
     {
         deserialize(ret,message.payloadlen);
 
-        
+        programs_submenu = SELECT_PROGRAM;
+
+        refresh_watering_valves = true;
+    
+        event_flag.set(REFRESH_DISPLAY);
+
     }
-  /*
-  if (reset > 0 && ret[0] == 'u') {
-      ret = ret +1;
-    deserialize(ret);
-    refresh_internet = 1;
-    if (reset > 0) {
-      reset--;
-    }
-  }
-  */
 }
 
 

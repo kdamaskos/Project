@@ -680,5 +680,10 @@ void rain_graphics();
 
 void flow_graphics();
 
+void display_sunny(int x ,int y);
+
+void display_sunny_cloudy(int x ,int y);
+
+void display_cloudy(int x, int y);
 
 #endif

@@ -310,6 +310,8 @@ void display()
 
                     temp_refresh = true;
 
+                    weather_refresh = true;
+
                     auto_graphics();
 
                 }
@@ -327,9 +329,9 @@ void display()
 
                         tft.background( Blue); 
 
-                        tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+                        tft.set_font((unsigned char *)Arial24x23);
 
-                        tft.locate(80,80);
+                        tft.locate(75,75);
 
                         tft.printf("Watering");
 
@@ -350,16 +352,19 @@ void display()
                             if (auto_valves[i]) 
                             {
                                 waterring_valves[count] = i;
+
                                 count++;  
                             }
     
                         }
 
+                        tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
                         tft.locate(55, 120);
 
-                        tft.printf("          ");
+                        tft.printf("         ");
 
-                        tft.locate(70, 120);
+                        tft.locate(70, 110);
 
                         // print valves which is watering
                         for (int i = 0; i < count; i++) 
@@ -369,16 +374,13 @@ void display()
 
                         }
 
-                        tft.locate(50,140);
-
-                        tft.printf("Time remaining :");
-
-
                     } 
                     else
                     {
 
                         tft.fillrect( 50, 60, 270,  190,  AUTO_C1);
+
+                        tft.set_font((unsigned char *)Arial24x23);
 
                         int ret = calculate_next_water(&next_water_hour, &next_water_min, &next_water_day, &next_water_program );
 
@@ -386,14 +388,13 @@ void display()
 
                         tft.foreground( White);
 
-                        tft.locate(80,70);
+                        tft.locate(65,70);
 
-                        tft.printf("Next Water");
-
-
+                        tft.printf("Next Watering");
 
                         if (ret) 
                         {
+
                             tft.set_font((unsigned char *)Arial24x23);
 
                             tft.locate(130,95);
@@ -429,10 +430,8 @@ void display()
                 }
                 
 
-                if(refresh_elapsed_time)
+                if(refresh_elapsed_time &&  is_watering)
                 {
-
-                    water_duration.sec--;
 
                     if( water_duration.min <0 && water_duration.hour >0)
                     {
@@ -445,10 +444,18 @@ void display()
                         water_duration.min--;
                         water_duration.sec = 59;
                     }
+
+                    tft.set_font((unsigned char *)Arial24x23);
+
+                    tft.background( Blue);
+
+                    tft.foreground( White);
                
-                    tft.locate(70,160);
+                    tft.locate(80,145);
 
                     tft.printf("%02d:%02d:%02d",water_duration.hour,water_duration.min,water_duration.sec);
+
+                    water_duration.sec--;
 
                     refresh_elapsed_time = false;
 
@@ -465,9 +472,9 @@ void display()
 
                         tft.foreground( Green);
 
-                        tft.locate(170,230);
+                        tft.locate(185,230);
 
-                        tft.printf("Active");
+                        tft.printf("ON");
 
                     } 
                     else 
@@ -479,9 +486,9 @@ void display()
 
                         tft.foreground( Red);
 
-                        tft.locate(160,230);
+                        tft.locate(185,230);
 
-                        tft.printf("Deactive");
+                        tft.printf("OFF");
 
                     }
 
@@ -504,7 +511,41 @@ void display()
                     flow_refresh = false;
 
                 }
-             
+
+                if (weather_refresh)
+                {
+                    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+                    tft.background( AUTO_C3);
+
+                    tft.foreground( White);
+
+                    tft.locate(285,100);
+
+                    tft.printf("Athens");
+
+                    tft.locate(300,130);
+
+                    tft.set_font((unsigned char *)Arial24x23);
+
+                    tft.printf("%s",weather);
+
+                    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+                    tft.locate(280,170);
+
+                    tft.printf("Temp : %d C",temperature);
+
+                    tft.locate(280,190);
+
+                    tft.printf("Humid : %d %%",humidity);
+ 
+                    weather_refresh = false;
+
+
+                }
+
+                     
                 event_flag.wait_any(REFRESH_DISPLAY);
 
                 break;

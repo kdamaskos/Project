@@ -48,75 +48,7 @@ DigitalInOut reset_esp(RESET_ESP);
 DigitalInOut power_esp(PA_11);
 
 
-//b72bf77dd82cb3ff9a431a86b59c42c6
-
 bool is_connected;
-
-
-#define BUFFER_SIZE  600
-#define TOTAL_BUFFER_SIZE 1200
- 
-char buffer1[BUFFER_SIZE];
-char buffer2[BUFFER_SIZE];
-char total_buffer[BUFFER_SIZE];
-
-char ServerName[] = "api.openweathermap.org";
-char http_cmd[] = "GET /data/2.5/weather?q=Athens&appid=d850f7f52bf19300a9eb4b0aa6b80f0d HTTP/1.0\r\n\r\n";
- 
-/*
-void weather_retrieve_task()
-{
-
-     printf(" Welcome \n");
-
-
-
-    SocketAddress a;
-    esp.get_ip_address(&a);
- 
-    printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
- 
- 
-        // Initialize the TCP Socket Connection
-        TCPSocket socket;
-        socket.open(&esp);
-        esp.gethostbyname(ServerName, &a);
-        printf("IP of server: %s\n", a.get_ip_address());
-        a.set_port(80);
- 
-        if(socket.connect(a) < 0)
-            printf("-- Connect - Fail -- \r\n");
-
-
-
-        while(1)
-        {
-
-        
-        // ThisThread::sleep_for(3s);
-        socket.send(http_cmd, sizeof(http_cmd));
- 
-        int n = socket.recv(buffer1, sizeof buffer1);
- 
-        char *ret ;
-        ret = strstr(buffer1,"POST");
-        ret = strstr(buffer1,"{");
-        strcpy(total_buffer,ret);
-        int n2 = socket.recv(buffer2, sizeof buffer2);
-        strcat(total_buffer,buffer2);
- 
- 
-        printf("\n\n2  %s \n\n",total_buffer);
-
-        ThisThread::sleep_for(15s);
-
-        }
-
-}
-
-*/
-
-Thread thread23(osPriorityNormal, 10 * 1024);
 
 
 void internet() 
@@ -151,8 +83,8 @@ reconnect:
     reset_esp  = 1;
 
     //int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-    //int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
-    int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
+    int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+   // int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
 
     if(rc != 0) 
     {
@@ -265,6 +197,14 @@ reconnect:
 
     
     if ((rc = client.subscribe("controller1/start_times", MQTT::QOS0,
+                             messageArrived)) != 0) 
+    {
+
+        printf("rc from start_times subscribe is %d\r\n", rc);
+
+    }
+
+    if ((rc = client.subscribe("controller1/weather", MQTT::QOS0,
                              messageArrived)) != 0) 
     {
 

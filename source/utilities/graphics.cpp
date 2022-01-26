@@ -268,11 +268,7 @@ void auto_graphics()
 
     tft.fillrect( xa  , yb+d, xb, 270,  AUTO_C2);
 
-    tft.fillrect( xb+d, ya, 430,  yb,  AUTO_C3);
-
-    tft.fillrect( xb+d, yb+d, 430,  270,  AUTO_C4);
-
-    tft.Bitmap(300,205,40,50,(unsigned char *)image_data_temp_icon);
+    tft.fillrect( xb+d, ya, 430,  270,  AUTO_C3);
 
     tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
@@ -289,6 +285,12 @@ void auto_graphics()
     tft.printf("Rain");
 
     tft.background( AUTO_C3);
+
+    tft.locate(310,70);
+
+    tft.printf("Weather");
+
+    tft.fillrect( 160, 205, 162,  265,  White);
 
 }
 
@@ -342,3 +344,4 @@ void water_budget_graphics()
     tft.printf("Set Water Budget");
 
 }
+

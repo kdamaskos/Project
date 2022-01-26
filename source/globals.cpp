@@ -58,4 +58,14 @@ bool flow_refresh;
 
 bool temp_refresh;
 
+bool weather_refresh;
+
 struct program_duration water_duration;
+
+
+
+int temperature;
+
+int humidity;
+
+char weather[20];

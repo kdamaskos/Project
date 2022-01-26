@@ -114,7 +114,7 @@ extern bool flow_refresh;
 
 extern bool temp_refresh;
 
-
+extern bool weather_refresh;
 
 
 struct program_duration
@@ -128,6 +128,13 @@ struct program_duration
 
 
 extern struct program_duration water_duration;
+
+extern int temperature;
+
+extern int humidity;
+
+extern char weather[20];
+
 
 
 

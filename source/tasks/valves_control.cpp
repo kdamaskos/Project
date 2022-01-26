@@ -53,7 +53,9 @@ void valves_control()
 
                                 start_time = time(NULL);    
 
-                                calculate_schedule(watering_program);                           
+                                calculate_schedule(watering_program);    
+
+                                printf("watering\n");                      
 
                                 break;
                             }
@@ -85,6 +87,8 @@ void valves_control()
                         is_watering = false;
 
                         refresh_watering_valves = true;
+
+                        printf("watering off\n");   
 
                         event_flag.set(REFRESH_DISPLAY);
                     }
