@@ -186,7 +186,6 @@ reconnect:
     }
 
 
-
     if ((rc = client.subscribe("controller1/manual", MQTT::QOS0,
                              messageArrived)) != 0) 
     {
@@ -208,7 +207,14 @@ reconnect:
                              messageArrived)) != 0) 
     {
 
-        printf("rc from start_times subscribe is %d\r\n", rc);
+        printf("rc from weather subscribe is %d\r\n", rc);
+
+    }
+    if ((rc = client.subscribe("controller1/budget", MQTT::QOS0,
+                             messageArrived)) != 0) 
+    {
+
+        printf("rc from budget subscribe is %d\r\n", rc);
 
     }
 

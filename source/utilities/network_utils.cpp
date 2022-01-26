@@ -20,9 +20,9 @@ void messageArrived(MQTT::MessageData &md)
     printf("\nMessage arrived: qos %d, retained %d, dup %d, packetid %d\r\n",
     message.qos, message.retained, message.dup, message.id);
 */
-    printf("size %d  \r\n", message.payloadlen);
+    //printf("size %d  \r\n", message.payloadlen);
 
-    printf("  %.*s\r\n", message.payloadlen, (char *)message.payload);
+    //printf("  %.*s\r\n", message.payloadlen, (char *)message.payload);
   
     char *ret = (char *)message.payload;
 

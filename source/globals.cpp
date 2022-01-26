@@ -52,8 +52,6 @@ struct schedule schedule[TOTAL_ZONES][TOTAL_PROGRAMS];
   volatile int warning;
 
 
-bool rain_refresh;
-
 bool flow_refresh;
 
 bool temp_refresh;

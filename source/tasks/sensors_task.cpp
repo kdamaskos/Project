@@ -1,19 +1,21 @@
+#include "sensors_task.h"
+
 #include "mbed.h"
 
 #include "config/pins_config.h"
+
+#include "globals.h"
 
 DigitalIn rain_sensor( RAIN_SENSOR_PIN );
 
 InterruptIn flow_sensor( FLOW_SENSOR_PIN );
 
 
-
-bool is_raining = false;
+bool  rain_refresh;
 
 int pulse;
 
 int live_flow;
-
 
 void pulse_count()
 {
@@ -21,14 +23,20 @@ void pulse_count()
 
 }
 
+
 Timer t;
 
 void sensors_task()
 {
-    printf("hello\n");
+    flow_sensor.mode(PullDown);
 
-    
+    rain_sensor.mode(PullDown);
+
     flow_sensor.rise(&pulse_count);
+
+    bool prev_rain;
+
+
 
     while(1)
     {
@@ -41,14 +49,19 @@ void sensors_task()
 
         live_flow =pulse/6;
 
-        //printf("%d\n", live_flow);
-
-
-        ThisThread::sleep_for(1s);
-
         pulse = 0;
 
-    
+        if(prev_rain != rain_sensor)
+        {
+            prev_rain = rain_sensor;
+
+            rain_refresh = true;
+
+        }
+
+        event_flag.set(REFRESH_DISPLAY);
+
+
     }
 }
 

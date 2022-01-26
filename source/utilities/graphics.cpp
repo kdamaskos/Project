@@ -266,13 +266,15 @@ void auto_graphics()
 
     tft.fillrect( xa, ya, xb,  yb,  AUTO_C1);
 
-    tft.fillrect( xa  , yb+d, xb, 270,  AUTO_C2);
+    tft.fillrect( xa  , yb+d,  xa + (xb-xa)/2, 270,  AUTO_C2a);
+
+    tft.fillrect(  xa + (xb-xa)/2 +d , yb+d, xb, 270,  AUTO_C2b);
 
     tft.fillrect( xb+d, ya, 430,  270,  AUTO_C3);
 
     tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-    tft.background( AUTO_C2);
+    tft.background( AUTO_C2a);
 
     tft.foreground( White);
 
@@ -280,7 +282,9 @@ void auto_graphics()
 
     tft.printf("Flow");
 
-    tft.locate(180,200);
+    tft.background( AUTO_C2b);
+
+    tft.locate(190,200);
 
     tft.printf("Rain");
 
@@ -289,8 +293,6 @@ void auto_graphics()
     tft.locate(310,70);
 
     tft.printf("Weather");
-
-    tft.fillrect( 160, 205, 162,  265,  White);
 
 }
 

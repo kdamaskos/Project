@@ -50,11 +50,15 @@
 //auto boxes colors
 #define AUTO_C1 0xA535
 
-#define AUTO_C2 0x1A37
+#define AUTO_C2a 0x1ADF
 
-#define AUTO_C3 0x31EC
+#define AUTO_C2b 0x6A12
+
+#define AUTO_C3 0x4C10
 
 #define AUTO_C4 0xD54E
+
+#define WATER_COLOR 0x163D
 
 extern ILI9486 tft;
 

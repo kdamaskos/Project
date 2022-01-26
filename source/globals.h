@@ -108,8 +108,6 @@ struct schedule
 
 extern struct schedule schedule[TOTAL_ZONES][TOTAL_PROGRAMS];
 
-extern bool rain_refresh;
-
 extern bool flow_refresh;
 
 extern bool temp_refresh;

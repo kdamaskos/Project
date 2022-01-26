@@ -27,9 +27,13 @@ bool refresh_date = true, refresh_wifi_icon = true ;
 
 extern int live_flow;
 
+extern bool rain_refresh;
+
+extern bool is_raining;
+
+extern DigitalIn rain_sensor;
+
 Thread thread(osPriorityNormal);
-
-
 
 void live_info_task()
 {
@@ -323,11 +327,11 @@ void display()
                     if (is_watering  ) 
                     {
 
-                        tft.fillrect( 50, 60, 270,  190,  Blue); 
+                        tft.fillrect( 50, 60, 270,  190,  WATER_COLOR); 
 
                         tft.foreground( White); 
 
-                        tft.background( Blue); 
+                        tft.background( WATER_COLOR); 
 
                         tft.set_font((unsigned char *)Arial24x23);
 
@@ -358,11 +362,13 @@ void display()
     
                         }
 
+                        tft.background( Blue); 
+
                         tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                        tft.locate(55, 120);
+                        tft.locate(70, 110);
 
-                        tft.printf("         ");
+                        tft.printf("           ");
 
                         tft.locate(70, 110);
 
@@ -447,7 +453,7 @@ void display()
 
                     tft.set_font((unsigned char *)Arial24x23);
 
-                    tft.background( Blue);
+                    tft.background( 0x428A);
 
                     tft.foreground( White);
                
@@ -463,18 +469,18 @@ void display()
 
                 if (rain_refresh)
                 {
-                    if (is_raining) 
+                    if (rain_sensor) 
                     {
 
                         tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                        tft.background( AUTO_C2);
+                        tft.background( AUTO_C2b);
 
                         tft.foreground( Green);
 
-                        tft.locate(185,230);
+                        tft.locate(195,230);
 
-                        tft.printf("ON");
+                        tft.printf("ON ");
 
                     } 
                     else 
@@ -482,11 +488,11 @@ void display()
 
                         tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                        tft.background( AUTO_C2);
+                        tft.background( AUTO_C2b);
 
                         tft.foreground( Red);
 
-                        tft.locate(185,230);
+                        tft.locate(195,230);
 
                         tft.printf("OFF");
 
@@ -500,7 +506,7 @@ void display()
                 {
                     tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-                    tft.background( AUTO_C2);
+                    tft.background( AUTO_C2a);
 
                     tft.foreground( White);
 
@@ -530,22 +536,30 @@ void display()
 
                     tft.printf("%s",weather);
 
-                    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+                    tft.set_font((unsigned char *)Arial12x12);
 
-                    tft.locate(280,170);
+                    tft.locate(290,180);
 
-                    tft.printf("Temp : %d C",temperature);
+                    tft.printf("Tempr");
 
-                    tft.locate(280,190);
+                    tft.locate(290,220);
 
-                    tft.printf("Humid : %d %%",humidity);
+                    tft.printf("Humid");
+
+                    tft.set_font((unsigned char *)Arial24x23);
+
+                    tft.locate(340,180);
+
+                    tft.printf("%d C",temperature);
+
+                    tft.locate(340,220);
+
+                    tft.printf("%d %%",humidity);
  
                     weather_refresh = false;
 
-
                 }
-
-                     
+   
                 event_flag.wait_any(REFRESH_DISPLAY);
 
                 break;

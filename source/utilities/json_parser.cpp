@@ -127,10 +127,6 @@ void deserialize(char *ret, int ln )
             }
         }
 
-        ret = strchr(ret, '"');
-
-        water_budget = atoi(ret + 1);
-
     } 
     else if (ret[2] == 'd') 
     { // days json
