@@ -38,7 +38,7 @@ string htmlPage = "<html>"
 
 "<body style=\"text-align:center;\" id=\"body\">"
     "<h1 style=\"color:green;\">"
-    "O giannis einai poustis"
+    "Wifi Connection"
     "</h1>"
 
     "<p>"
@@ -133,7 +133,7 @@ void waitFor(BufferedSerial * serial_port, char * text)
         }
     }
 
-    printf("%s\n", s.c_str());
+   //printf("%s\n", s.c_str());
 }
 
 void sendCommand(BufferedSerial * serial_port, char * cmd) 
@@ -198,13 +198,13 @@ void httpReply(BufferedSerial * serial_port,int linkId, string code, string payl
 void handleRequest(BufferedSerial * serial_port,int linkId, int page) 
 { 
     
-    if (page == 0) 
+    if (page == SEND_WEBPAGE) 
     { 
 
         httpReply(serial_port,linkId, "200 OK", htmlPage); // Website send
 
     }
-    else if ( page == 1 ) 
+    else if ( page == UPDATE_DATA ) 
     { 
 
         httpReply(serial_port,linkId, "200 OK", "SSID and password set");
@@ -279,34 +279,12 @@ void server(char * ssid, char * psw)
             
         }
 
-        serial_port.read(buffer, 150);
-        //printf("%s\n",buffer);
+        serial_port.read(buffer, 20);
+        
+        printf("buffer = %s\n",buffer);
 
-        if(strstr(buffer,"/route?") != NULL)
-        {
-               
-            psw = strstr(buffer,"&psw=");
 
-            char *end = strstr(psw," ");
-
-            end[0] = NULL;
-
-            psw[0] = NULL;
-
-            char * ssid = strstr(buffer,"ssid=");
-
-            handleRequest(&serial_port,linkId,UPDATE_DATA);
-
-            //ssid = ssid +5;
-
-            //psw = psw +5;
-
-            printf("\n\nssid = %s, psw = %s\n\n",ssid,psw);
-
-            break;
-
-        }
-        else if (strstr(buffer,":GET ") != NULL)
+        if (strstr(buffer,":GET ") != NULL)
         {
 
             handleRequest(&serial_port,linkId,SEND_WEBPAGE);
@@ -314,11 +292,39 @@ void server(char * ssid, char * psw)
         }
         else if(strstr(buffer,":POST ") != NULL)
         {   
-            waitFor(&serial_port,(char *)"name\":\"");
+            waitFor(&serial_port,(char *)"name\":");
 
-            waitFor(&serial_port,(char *)"email\":\"");
+            serial_port.read(buffer, 200);
 
-            //handleRequest(&serial_port,linkId, SEND_ERROR);
+            ssid = strstr(buffer,"\"")+1;
+
+            char *end = strstr(ssid+1,"\"");
+
+            end[0] = NULL;
+
+            psw = strstr(end+1,"email\":");
+
+            psw += 8;
+
+            end = strstr(psw,"\"");
+
+            if(end == NULL)
+            {
+                printf("\n\n str null  \n\n");
+                break;
+            }
+
+            end[0] = NULL;
+
+            printf("\n\n server  ssid= \"%s\" psw = \"%s\"  \n\n",ssid,psw);
+
+            handleRequest(&serial_port,linkId,UPDATE_DATA);
+
+            sendCommand(&serial_port,(char *)"AT+RST");
+
+            waitFor(&serial_port,(char *)"OK");
+
+            break;
 
         }
         else 

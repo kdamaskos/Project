@@ -16,9 +16,9 @@
 #include "utilities/include/general.h"
 
 
-Thread thread1(osPriorityNormal, 10 * 1024);
+Thread thread1(osPriorityAboveNormal7, 10 * 1024);
 
-Thread thread2(osPriorityNormal);
+Thread thread2(osPriorityNormal+5);
 
 Thread thread3(osPriorityNormal);
 
@@ -33,8 +33,10 @@ int main()
     init();
 
    // printf("hello\n");
-
+   
     thread1.start(callback(internet));
+
+    ThisThread::sleep_for(2s);
 
     thread2.start(callback(display));
 

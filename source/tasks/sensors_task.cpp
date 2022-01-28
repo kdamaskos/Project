@@ -59,9 +59,11 @@ void sensors_task()
 
         }
 
-        event_flag.set(REFRESH_DISPLAY);
-
-
+        if(menu == AUTO)
+        {
+            event_flag.set(REFRESH_DISPLAY);
+        }
+        
     }
 }
 

@@ -85,9 +85,9 @@ void init_buttons()
 
     ROTARY_B.mode(PullUp);
 
-    ROTARY_R.mode(PullUp);
+    ROTARY_R.mode(PullDown);
 
-    ROTARY_L.mode(PullUp);
+    ROTARY_L.mode(PullDown);
 
     ROTARY_L.rise(&rcBrise_handler);
 
@@ -841,6 +841,7 @@ void buttons()
         }//switch (action) {
 
         event_flag.set(REFRESH_DISPLAY);
+        ThisThread::sleep_for(50ms);
 
     }//while(1)
 

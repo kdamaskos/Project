@@ -173,7 +173,6 @@ void display()
                         duration.print_all(program);
 
                         event_flag.wait_any(REFRESH_DISPLAY); 
-
                         
                         if (previous_programs_submenu != programs_submenu)
                         {
@@ -842,6 +841,8 @@ void display()
             tft.fillrect(30 , 50, 455, 291, BACKGROUND_MAIN);
 
         }
+
+        
     
     }// while(1)
 } // display 
