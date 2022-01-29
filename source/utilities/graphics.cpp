@@ -14,13 +14,14 @@
 #include "icons/water_drop.h"
 
 #include "icons/humid_icon.h"
+#include <cstring>
 
 
 const char *WEEK_DAY[] = {"Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"};
 
 const char *PROGRAM[] = {"A", "B", "C", "D"};
 
-
+const char *MONTHS[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 
 
 
@@ -82,13 +83,19 @@ void update_wifi_icon(bool is_connected)
 
     if (is_connected)
     {
-        tft.printf("ssid");
+
+        tft.printf("%.10s", ssid);
+
+        printf("%.10s", ssid);
 
         tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi);
 
     }
     else
     {
+        tft.background( BACKGROUND_TOP);
+    
+        tft.foreground(Red);
 
         tft.printf("    ");
 
@@ -208,7 +215,6 @@ void menu_graphics()
 
 void program_graphics()
 {
-
     tft.fillrect(36 , 51, 454, 289, PROGRAM_COLOR);
 
     tft.rect(35,50,455,290, Black);
@@ -244,23 +250,39 @@ void program_graphics()
 
 void manual_graphics()
 {
-    tft.fillrect( 70, 65, 280, 290, PROGRAM_COLOR);
     
     tft.background( White);
 
     tft.foreground(Black);
 
-    tft.set_font((unsigned char *)Arial28x28);
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
+    tft.set_orientation(0);
 
-    tft.locate(300, 70);
+    tft.locate(65, 30);
 
-    tft.printf("manual");
+    tft.printf("Manual Control");
+
+    tft.set_orientation(1);
 
 }
 
 void auto_graphics()
 {
+
+    tft.background( White);
+
+    tft.foreground(Black);
+
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+    tft.set_orientation(0);
+
+    tft.locate(85, 27);
+
+    tft.printf("Auto Control");
+
+    tft.set_orientation(1);
   
     int xa =50, ya = 60, xb =270 , yb =190, d =7 ;
 
@@ -298,52 +320,98 @@ void auto_graphics()
 
 void flow_graphics()
 {
-    tft.fillrect( 70, 65, 280, 290, PROGRAM_COLOR);
-    
     tft.background( White);
 
     tft.foreground(Black);
 
-    tft.set_font((unsigned char *)Arial28x28);
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
+    tft.set_orientation(0);
 
-    tft.locate(300, 70);
+    tft.locate(120, 30);
 
-    tft.printf("flow");
+    tft.printf("Set Flow");
 
+    tft.set_orientation(1);
 }
 
 void rain_graphics()
 {
-    tft.fillrect( 70, 65, 280, 290, PROGRAM_COLOR);
-
-    tft.background( White);
+   tft.background( White);
 
     tft.foreground(Black);
 
-    tft.set_font((unsigned char *)Arial28x28);
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-    tft.locate(300, 70);
+    tft.set_orientation(0);
 
-    tft.printf("rain");
+    tft.locate(60, 30);
+
+    tft.printf("Set Rain Sensor");
+
+    tft.set_orientation(1);
 
 }
 
 void water_budget_graphics()
 {
-    tft.fillrect( 100, 105, 350, 220, PROGRAM_COLOR);
+   tft.background( White);
 
-    tft.rect( 100, 105, 350, 220, Black);
+    tft.foreground(Black);
 
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+    tft.set_orientation(0);
+
+    tft.locate(60, 30);
+
+    tft.printf("Set Water Budget");
+
+    tft.set_orientation(1);
+
+}
+
+void wifi_info_graphics()
+{
     tft.background( White);
 
     tft.foreground(Black);
 
-    tft.set_font((unsigned char *)Arial28x28);
-    
-    tft.locate(90, 70);
+    tft.set_font((unsigned char *)Goudy_Old_Style21x19);
 
-    tft.printf("Set Water Budget");
+    tft.set_orientation(0);
+
+    tft.locate(60, 30);
+
+    tft.printf("Network");
+
+    tft.set_orientation(1);
+
+    tft.fillrect(80 ,70, 400, 280, PROGRAM_COLOR);
+
+    tft.rect(80 ,70, 400, 280, Black);
+
+    tft.locate(100, 90);
+
+    tft.printf("Status  : ");
+
+    tft.locate(100, 130);
+
+    tft.printf("SSID    : ");
+
+    tft.locate(100, 170);
+
+    tft.printf("IP      : ");
+
+    tft.locate(100, 210);
+
+    tft.printf("MAC     : ");
+
+    tft.locate(100, 250);
+
+    tft.printf("Signal  : ");
+
+
+
 
 }
-

@@ -51,11 +51,14 @@ DigitalInOut power_esp(PA_11);
 bool is_connected;
 
 
+char *ip_adress, *mac_adress;
+
+int signal;
+
 void internet() 
 {
-    char  ssid[50],  psw[50]; 
 
-   //server(ssid,psw);
+   server();
 
     ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
     
@@ -82,8 +85,10 @@ reconnect:
 
     reset_esp  = 1;
 
-    //int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-    int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+    printf("\n\n connect ssid= \"%s\" psw = \"%s\"  \n\n",ssid,psw);
+
+    int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+    //int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
    // int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
 
     if(rc != 0) 
@@ -103,7 +108,13 @@ reconnect:
     {
         esp.get_ip_address(&deviceIP);
 
-        printf("IP via DHCP: %s\n", deviceIP.get_ip_address());
+        strcmp(ip_adress,deviceIP.get_ip_address());
+
+        strcmp(mac_adress,esp.get_mac_address());
+
+        signal = esp.get_rssi ();
+
+        printf("IP via DHCP: %s\n", ip_adress);
 
         is_connected = true;
     }
@@ -175,8 +186,6 @@ reconnect:
        
     }
 
-
-
     if ((rc = client.subscribe("controller1/days", MQTT::QOS0, messageArrived)) !=
       0) 
     {
@@ -194,7 +203,6 @@ reconnect:
     }
 
 
-    
     if ((rc = client.subscribe("controller1/start_times", MQTT::QOS0,
                              messageArrived)) != 0) 
     {

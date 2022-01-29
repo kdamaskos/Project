@@ -27,6 +27,9 @@ bool refresh_elapsed_time,refresh_watering_valves,refresh_display, publish_valve
 struct schedule schedule[TOTAL_ZONES][TOTAL_PROGRAMS];
 
 
+int water_budget[] = {100,100,100,100,100,100,100,100,100,100,100,100};
+
+int month;
 
 
   volatile int cycle; //each start time
@@ -34,14 +37,14 @@ struct schedule schedule[TOTAL_ZONES][TOTAL_PROGRAMS];
   volatile int day; 
   volatile int program;
   volatile int is_watering;
-  volatile int water_budget = 100;
+
   volatile int timezone;
   volatile float supply_flow = 50;
   volatile int online;
   volatile int leak_detection;
   volatile int flow_read;
 
-
+char *ssid,*psw;
 
   bool back_pressed; 
   bool next_pressed; 

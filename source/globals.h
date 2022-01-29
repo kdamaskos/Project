@@ -54,6 +54,8 @@
 extern EventFlags event_flag;
 
 
+extern char *ssid,*psw;
+
 //display
 extern volatile int options_submenu ;
 extern volatile int programs_submenu ;
@@ -73,9 +75,13 @@ extern  volatile int rain[TOTAL_ZONES];
 extern  volatile int flow[TOTAL_ZONES];
 extern  volatile int manual_valves[TOTAL_ZONES]; //for manual control
 extern  volatile int auto_valves[TOTAL_ZONES]; // schedule for auto run for each time interval
+extern int water_budget[12];
+
+extern int month;
 
 extern   int total_duration;
 extern  volatile int duration_remain[TOTAL_ZONES];
+
 
 
 
@@ -84,7 +90,7 @@ extern  volatile int valve;
 extern  volatile int day; 
 extern  volatile int program;
 extern  volatile int is_watering;
-extern  volatile int water_budget ;
+
 extern  volatile int timezone;
 extern  volatile float supply_flow;
 extern  volatile int online;

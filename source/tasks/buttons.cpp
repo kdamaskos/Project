@@ -408,7 +408,15 @@ void buttons()
 
                             case WATER_BUDGET:
 
-                           
+                                if (rotary_pressed_count == 0)
+                                {
+                                    rotary_pressed_count = 1;
+                                }
+                                else
+                                {
+                                    rotary_pressed_count = 0;
+                                }
+
 
                                 break;
 
@@ -604,11 +612,20 @@ void buttons()
 
                             case WATER_BUDGET:
 
-                                if (water_budget < 200)
+                                if (rotary_pressed_count == 1)
                                 {
-                                    water_budget +=10;
+                                    if (water_budget[month] < 200)
+                                    {
+                                        water_budget[month] +=10;
+                                    }
                                 }
-                                
+                                else 
+                                {
+                                    if (month < 11)
+                                    {
+                                        month++;
+                                    }
+                                }
 
                                 break;
                             
@@ -806,11 +823,21 @@ void buttons()
 
                             case WATER_BUDGET:
 
-                                if (water_budget > 0)
+                                if (rotary_pressed_count == 1)
                                 {
-                                    water_budget -=10;
+                                    if (water_budget[month] > 5)
+                                    {
+                                        water_budget[month] -=5;
+                                    }
                                 }
-                                
+                                else 
+                                {
+                                    if (month > 0)
+                                    {
+                                        month--;
+                                    }
+                                }
+
                                 break;
                             
                             case NETWORK:

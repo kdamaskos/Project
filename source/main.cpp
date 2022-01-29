@@ -18,7 +18,7 @@
 
 Thread thread1(osPriorityAboveNormal7, 10 * 1024);
 
-Thread thread2(osPriorityNormal+5);
+Thread thread2(osPriorityNormal);
 
 Thread thread3(osPriorityNormal);
 
@@ -42,9 +42,9 @@ int main()
 
     thread3.start(callback(buttons));
 
-    thread4.start(callback(valves_control));
+   thread4.start(callback(valves_control));
 
-    thread5.start(callback(sensors_task));
+   thread5.start(callback(sensors_task));
   
 
     while (1) 

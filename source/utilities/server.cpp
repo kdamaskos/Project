@@ -2,6 +2,8 @@
 
 #include "mbed.h"
 
+#include "globals.h"
+#include <cstring>
 
 #define SEND_ERROR      -1
 
@@ -133,7 +135,7 @@ void waitFor(BufferedSerial * serial_port, char * text)
         }
     }
 
-   //printf("%s\n", s.c_str());
+   printf("%s\n", s.c_str());
 }
 
 void sendCommand(BufferedSerial * serial_port, char * cmd) 
@@ -209,8 +211,6 @@ void handleRequest(BufferedSerial * serial_port,int linkId, int page)
 
         httpReply(serial_port,linkId, "200 OK", "SSID and password set");
 
-        printf("got wifi\n");
-
     } 
     else 
     { 
@@ -223,7 +223,7 @@ void handleRequest(BufferedSerial * serial_port,int linkId, int page)
 
 
 
-void server(char * ssid, char * psw)
+void server()
 {
     BufferedSerial serial_port(D8, D2);
 
@@ -279,7 +279,7 @@ void server(char * ssid, char * psw)
             
         }
 
-        serial_port.read(buffer, 20);
+        serial_port.read(buffer, 500);
         
         printf("buffer = %s\n",buffer);
 
@@ -316,7 +316,11 @@ void server(char * ssid, char * psw)
 
             end[0] = NULL;
 
-            printf("\n\n server  ssid= \"%s\" psw = \"%s\"  \n\n",ssid,psw);
+            strcpy(ssid, ssid);
+
+
+
+            printf("\n\n server %d ssid= \"%s\" %d psw = \"%s\"  \n\n",strlen(ssid), ssid, strlen(psw),psw);
 
             handleRequest(&serial_port,linkId,UPDATE_DATA);
 

@@ -31,6 +31,10 @@ extern bool rain_refresh;
 
 extern bool is_raining;
 
+extern char *ip_adress, *mac_adress;
+
+extern int signal;
+
 extern DigitalIn rain_sensor;
 
 Thread thread(osPriorityNormal);
@@ -96,11 +100,13 @@ void display()
 
     Table duration_table(230,75, 455,291, 8, 5);
 
-    Table flow_table( 70, 65, 280, 290, 8, 5);
+    Table flow_table( 100, 65, 350, 290, 8, 5);
     
-    Table rain_table( 70, 65, 280, 290, 8, 5);
+    Table3 rain_table( 100, 65, 360, 290, 8, 5);
 
-    Table manualTable( 70, 65, 280, 290, 8, 5);
+    Table3 manualTable( 70, 65, 320, 290, 8, 5);
+
+    Table2 water_bdg (120,70, 360,290, 6,2) ;
 
     CustomRect2 submenu_icons(40, 70, 120,90, 20,  0x4AF1, White, 3,20);
 
@@ -597,32 +603,28 @@ void display()
 
                     if (warning) 
                     {
-                
                         tft.foreground(Red);
-                        tft.background(White);
-                        tft.set_font((unsigned char *)Arial16x16);
 
-                        tft.locate(290, 150);
-                        tft.printf("Max Active Valves");
+                        tft.background(White);
 
                         tft.set_font((unsigned char *)Arial28x28);
-                        tft.locate(360, 180);
-                        tft.printf("%d", MAXVALVES);
+
+                        tft.locate(340, 150);
+
+                        tft.printf("Max %d",MAXVALVES);
 
                         warning = 0;
                     }
                     else 
                     {
-                        tft.foreground(Red);
-                        tft.background(White);
-                        tft.set_font((unsigned char *)Arial16x16);
 
-                        tft.locate(290, 150);
-                        tft.printf("               ");
+                        tft.background(White);
 
                         tft.set_font((unsigned char *)Arial28x28);
-                        tft.locate(360, 180);
-                        tft.printf("   ");
+
+                        tft.locate(350, 150);
+
+                        tft.printf("      ");
 
 
                     }
@@ -756,35 +758,41 @@ void display()
                         break;
                     }
 
-                    case WATER_BUDGET:
+                    case WATER_BUDGET:{
 
                         if(previous_options_submenu != options_submenu)
                         {
+                            water_budget_graphics();
+
+                            water_bdg.draw();
+
+                            water_bdg.populate(water_budget);
 
                             previous_options_submenu = WATER_BUDGET;
 
-                            water_budget_graphics();
-
                         }
 
-                        tft.background( PROGRAM_COLOR);
+                        if (rotary_rotated)
+                        {
 
-                        tft.foreground(Black);
+                           water_bdg.select(month,(int *) water_budget);
 
-                        tft.set_font((unsigned char *)Arial28x28);
+                            rotary_rotated = false;
+                        }
 
-                        tft.locate(200, 150);
+                        if ( rotary_pressed) 
+                        {
 
-                        tft.printf("%d  ",water_budget);
+                            water_bdg.print(month,(int *) water_budget);
+  
+                            rotary_pressed = false;
 
-                        tft.locate(250, 150);
-
-                        tft.printf("%%");
+                        }
 
                         event_flag.wait_any(REFRESH_DISPLAY);
 
                         break;
-
+                    }
                     case NETWORK:
 
                         if(previous_options_submenu != options_submenu)
@@ -792,9 +800,65 @@ void display()
 
                             previous_options_submenu = NETWORK;
 
+                            wifi_info_graphics();
+
 
                         }
-                            
+
+                        
+
+                        if (is_connected)
+                        {
+                            tft.locate(200, 90);
+
+                            tft.foreground(Green);
+
+                            tft.printf("Connected");
+
+                            tft.locate(200, 130);
+
+                            tft.printf("%.10s",ssid);
+                            printf("%s",ssid);
+
+                            tft.locate(200, 170);
+
+                            tft.printf("%s",ip_adress);
+                            printf(" ip =%s",ip_adress);
+
+                            tft.locate(200, 210);
+
+                            tft.printf("%s",mac_adress);
+                            printf("mac = %s",mac_adress);
+
+                            tft.locate(200, 250);
+
+                            tft.printf("%d db",signal);
+                        }
+                        else 
+                        {
+                            tft.locate(200, 90);
+
+                            tft.foreground(Red);
+
+                            tft.printf("Not connected");
+
+                            tft.locate(200, 130);
+
+                            tft.printf("-");
+
+                            tft.locate(200, 170);
+
+                            tft.printf("-");
+
+                            tft.locate(200, 210);
+
+                            tft.printf("-");
+
+                            tft.locate(200, 250);
+
+                            tft.printf("-");
+                        }
+
                         event_flag.wait_any(REFRESH_DISPLAY);
   
                         break;
@@ -838,7 +902,7 @@ void display()
         if (previous_menu != menu || previous_options_submenu != options_submenu )
         {
             
-            tft.fillrect(30 , 50, 455, 291, BACKGROUND_MAIN);
+            tft.fillrect(28 , 50, 455, 291, BACKGROUND_MAIN);
 
         }
 

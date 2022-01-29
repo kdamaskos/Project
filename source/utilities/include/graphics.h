@@ -67,12 +67,15 @@ extern const char *WEEK_DAY[];
 
 extern const char *PROGRAM[];
 
+extern const char *MONTHS[];
 
 void select( int selection);
 
 void update_date_time();
 
 void update_wifi_icon(bool is_connected);
+
+void wifi_info_graphics();
 
 class CustomRect2
 {
@@ -557,6 +560,7 @@ class Table
 
         void draw()
         {
+            tft.fillrect( x1, y1, x2, y2, color_table);
 
             tft.background(color_table); 
 
@@ -661,6 +665,317 @@ class Table
             tft.background(Black); 
             tft.locate( (cell/nrow) *cell_x+x1+8, y1+8+ (cell%nrow) *cell_y); 
             tft.printf("%d",Data[cell]);
+
+        }
+
+
+};
+
+
+
+class Table2 
+{
+
+    int x1, y1, x2, y2, nrow, ncol,color,color_table, cell_x, cell_y, prev = 0, length, col, row;
+
+    public:
+
+    Table2(int X1, int Y1, int X2, int Y2, int Nrow, int Ncol,unsigned int Color_Table = PROGRAM_COLOR, unsigned int Color = Black,  int Length = 40) 
+    {
+
+        x1=X1, y1=Y1, x2=X2, y2=Y2, nrow=Nrow, ncol=Ncol,color=Color,color_table =Color_Table;
+        cell_x = (x2-x1)/ncol;
+        cell_y = (y2-y1)/nrow;
+        length = Length;
+
+    }
+
+        void draw()
+        {
+
+            tft.fillrect(x1, y1, x2, y2, color_table);
+            
+            tft.background(color_table); 
+
+            tft.foreground( Black); 
+
+            tft.set_font((unsigned char *)Arial12x12);
+
+            int i =0;
+
+            for ( col=0; col<=ncol; col++) 
+            {
+                tft.line(x1+cell_x*col , y1, x1+cell_x*col,  y2, color);
+
+                for ( row=0; row<= nrow; row++) 
+                {
+                    tft.line(x1 , y1+row*cell_y, x2,  y1+row*cell_y, color);
+
+                }
+            }
+
+            for ( col=0; col<ncol; col++) 
+            {
+
+                for ( row=0; row< nrow; row++) 
+                {
+
+                    tft.locate(col*cell_x+x1+1,y1+1+row*cell_y); 
+
+                    tft.printf("%s", MONTHS[i++]);
+
+                }
+            }  
+     
+        }
+
+        void populate(int *Data = NULL)
+        {
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.foreground( Black); 
+
+            tft.background( color_table); 
+
+            int i= 0;
+
+            for (int col=0; col< ncol; col++) 
+            {
+
+                for (int row=0; row< nrow; row++) 
+                {
+
+                    tft.locate( (i/nrow) *cell_x+x1+40, y1+8+ (i%nrow) *cell_y); 
+
+                    tft.printf("%d",Data[i]);
+
+                    i++;
+  
+                }
+            }           
+        }
+
+        void clear_select (int cell, int  *Data = NULL)
+        {
+
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.foreground( Black); 
+
+            tft.background( color_table); 
+
+            tft.locate( (cell/nrow) *cell_x+x1+40, y1+8+ ( cell%nrow) *cell_y); 
+
+            tft.printf("%d  ", Data[cell]);
+            
+        }
+
+        void select (int cell, int  *Data = NULL)
+        {
+
+            clear_select (prev, Data);
+
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.foreground( White); 
+
+            tft.background( Black); 
+
+            tft.locate( (cell/nrow) *cell_x+x1+40, y1+8+ (cell%nrow) *cell_y); 
+
+            tft.printf("%d", Data[cell]);
+
+            prev = cell;
+        }
+
+
+        void print(int cell, int *Data= NULL)
+        {
+
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.foreground(White); 
+            tft.background(Black); 
+            tft.locate( (cell/nrow) *cell_x+x1+40, y1+8+ (cell%nrow) *cell_y); 
+            tft.printf("%d",Data[cell]);
+
+        }
+
+
+};
+
+
+
+class Table3 
+{
+
+    int x1, y1, x2, y2, nrow, ncol,color,color_table, cell_x, cell_y, prev = 0, length, col, row;
+
+    public:
+
+
+    Table3(int X1, int Y1, int X2, int Y2, int Nrow, int Ncol,unsigned int Color_Table = PROGRAM_COLOR, unsigned int Color = Black,  int Length = 40) 
+    {
+
+        x1=X1, y1=Y1, x2=X2, y2=Y2, nrow=Nrow, ncol=Ncol,color=Color,color_table =Color_Table;
+        cell_x = (x2-x1)/ncol;
+        cell_y = (y2-y1)/nrow;
+        length = Length;
+
+    }
+
+        void draw()
+        {
+            tft.fillrect( x1, y1, x2, y2, color_table);
+
+            tft.background(color_table); 
+
+            tft.foreground( Black); 
+
+            tft.set_font((unsigned char *)Terminal6x8);
+
+            int i =0;
+
+            for ( col=0; col<=ncol; col++) 
+            {
+                tft.line(x1+cell_x*col , y1, x1+cell_x*col,  y2, color);
+
+                for ( row=0; row<= nrow; row++) 
+                {
+                    tft.line(x1 , y1+row*cell_y, x2,  y1+row*cell_y, color);
+
+                }
+            }
+
+            for ( col=0; col<ncol; col++) 
+            {
+
+                for ( row=0; row< nrow; row++) 
+                {
+
+                    tft.locate(col*cell_x+x1+1,y1+1+row*cell_y); 
+
+                    tft.printf("%d", i++);
+
+                }
+            }  
+     
+        }
+
+        void populate(int *Data = NULL)
+        {
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.background( color_table); 
+
+            int i= 0;
+
+            for (int col=0; col< ncol; col++) 
+            {
+
+                for (int row=0; row< 8; row++) 
+                {
+
+                    tft.locate( (i/nrow) *cell_x+x1+8, y1+8+ (i%nrow) *cell_y); 
+
+                    if(Data[i])
+                    {
+                        tft.foreground( DarkGreen); 
+
+                        tft.printf("On");
+                    }
+                    else 
+                    {
+                        tft.foreground( Red); 
+
+                        tft.printf("- ");
+                    }
+                    
+                    i++;
+  
+                }
+            }           
+        }
+
+        void clear_select (int cell, int  *Data = NULL)
+        {
+
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.background( color_table); 
+
+            tft.locate( (cell/nrow) *cell_x+x1+8, y1+8+ ( cell%nrow) *cell_y); 
+
+            
+            if(Data[cell])
+            {
+                tft.foreground( DarkGreen); 
+
+                tft.printf("On");
+            }
+            else 
+            {
+                tft.foreground( Red); 
+
+                tft.printf("-  ");
+            }
+                    
+            
+        }
+
+        void select (int cell, int  *Data = NULL)
+        {
+
+            clear_select (prev, Data);
+
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.foreground( White); 
+
+            tft.background( Black); 
+
+            tft.locate( (cell/nrow) *cell_x+x1+8, y1+8+ (cell%nrow) *cell_y); 
+
+            
+            if(Data[cell])
+            {
+                tft.foreground( DarkGreen); 
+
+                tft.printf("On");
+            }
+            else 
+            {
+                tft.foreground( Red); 
+
+                tft.printf("- ");
+            }
+                    
+
+            prev = cell;
+        }
+
+
+        void print(int cell, int *Data= NULL)
+        {
+
+            tft.set_font((unsigned char *)Goudy_Old_Style21x19);
+
+            tft.background(Black); 
+
+            tft.locate( (cell/nrow) *cell_x+x1+8, y1+8+ (cell%nrow) *cell_y); 
+            
+            if(Data[cell])
+            {
+                tft.foreground( DarkGreen); 
+
+                tft.printf("On");
+            }
+            else 
+            {
+                tft.foreground( Red); 
+
+                tft.printf("- ");
+            }
 
         }
 

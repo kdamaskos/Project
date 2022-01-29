@@ -73,7 +73,7 @@ void valves_control()
 
                     refresh_elapsed_time = true;
                     
-                    if (current_time > water_duration.total*60* water_budget / 100 + start_time)
+                    if (current_time > water_duration.total*60* water_budget[t->tm_mon] / 100 + start_time)
                     {
                         for (int i = 0; i < TOTAL_STARTS; i++)
                         {
@@ -88,13 +88,13 @@ void valves_control()
 
                         event_flag.set(REFRESH_DISPLAY);
                     }
-                    else if ( current_time > start_time + 60 * time_shift * INTERVAL_TIME * water_budget / 100 )
+                    else if ( current_time > start_time + 60 * time_shift * INTERVAL_TIME * water_budget[t->tm_mon] / 100 )
                     {
                         for (int i = 0; i < TOTAL_ZONES; i++)
                         {
-                            t1 = start_time + schedule[i][watering_program].time_shift * INTERVAL_TIME *60 * water_budget / 100;
+                            t1 = start_time + schedule[i][watering_program].time_shift * INTERVAL_TIME *60 * water_budget[t->tm_mon] / 100;
 
-                            t2 = start_time + schedule[i][watering_program].time_shift * INTERVAL_TIME * 60 * water_budget / 100 + schedule[i][watering_program].duration * INTERVAL_TIME * 60 * water_budget / 100;
+                            t2 = start_time + schedule[i][watering_program].time_shift * INTERVAL_TIME * 60 * water_budget[t->tm_mon] / 100 + schedule[i][watering_program].duration * INTERVAL_TIME * 60 * water_budget[t->tm_mon] / 100;
                             
                             if (  current_time > t1 && current_time < t2)
                             {
