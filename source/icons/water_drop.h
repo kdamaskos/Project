@@ -1,7 +1,7 @@
 
 #include <stdint.h>
 
-#include <utilities/include/graphics.h>
+#include <apps/include/graphics.h>
 
 static const uint16_t image_data_water_drop[2960] = {
     BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, 0xffff, 0xffff, 0xffff, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xc618, 0xffff, 0xffff, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, BACKGROUND_C, 

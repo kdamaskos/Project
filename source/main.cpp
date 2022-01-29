@@ -3,24 +3,24 @@
 
 #include "main.h"
 
-#include "tasks/include/display.h"
+#include "tasks/include/task_display.h"
 
-#include "tasks/include/sensors_task.h"
+#include "tasks/include/task_sensors.h"
 
-#include "tasks/include/network.h"
+#include "tasks/include/task_network.h"
 
-#include "tasks/include/valves_control.h"
+#include "tasks/include/task_valves.h"
 
-#include "tasks/include/buttons.h"
+#include "tasks/include/task_buttons.h"
 
-#include "utilities/include/general.h"
+#include "apps/include/general.h"
 
 
-Thread thread1(osPriorityAboveNormal7, 10 * 1024);
+Thread thread1(osPriorityNormal, 10 * 1024);
 
 Thread thread2(osPriorityNormal);
 
-Thread thread3(osPriorityNormal);
+Thread thread3(osPriorityNormal+5);
 
 Thread thread4(osPriorityNormal+15);
 
@@ -30,10 +30,10 @@ Thread thread5(osPriorityNormal+10);
 int main() 
 {
 
+    printf("Hello from Mbed OS %d.%d \n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION);
+
     init();
 
-   // printf("hello\n");
-   
     thread1.start(callback(internet));
 
     ThisThread::sleep_for(2s);
@@ -42,11 +42,10 @@ int main()
 
     thread3.start(callback(buttons));
 
-   thread4.start(callback(valves_control));
+    thread4.start(callback(valves_control));
 
-   thread5.start(callback(sensors_task));
+    thread5.start(callback(sensors_task));
   
-
     while (1) 
     {
 
