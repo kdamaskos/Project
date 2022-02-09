@@ -3,7 +3,7 @@
 
 #include <MQTTClientMbedOs.h>
 
-void ntpGetTime(NTPClient ntp);
+int ntpGetTime(NTPClient ntp);
 
 void publish_data (char * buffer,  MQTT::Message msg, MQTTClient client);
 

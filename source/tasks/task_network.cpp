@@ -55,10 +55,15 @@ char *ip_adress, *mac_adress;
 
 int signal;
 
+
+void check()
+{
+    is_connected = false;
+}
 void internet() 
 {
 
-   server();
+   //server();
 
     ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
     
@@ -77,30 +82,45 @@ void internet()
 
     printf("\nConnecting wifi..\n");
 
+   esp.set_blocking(false);
+
 reconnect:
+
+    client.disconnect();
+
+    esp.disconnect();
+
+    socket.close();
+
+    reset_esp  = 0;
+
+    is_connected = false;
+
+    ThisThread::sleep_for(1s);
 
     power_esp = 1;
 
     reset_esp  = 1;
 
-    int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-    //int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
-   // int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
+    ThisThread::sleep_for(1s);
 
-    if(rc != 0) 
+    //int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+    int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+   //int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
+
+   ThisThread::sleep_for(2s);
+
+   rc =esp.get_connection_status();
+
+   printf("connection status %d\n",rc);
+
+    if(rc >1) 
     {
-        printf("\nConnection error %d\n",rc);
         
-        reset_esp  = 0;
-
-        is_connected = false;
-
-        ThisThread::sleep_for(2s);
-
         goto reconnect;
 
     } 
-    else
+    else 
     {
         esp.get_ip_address(&deviceIP);
 
@@ -112,13 +132,27 @@ reconnect:
 
         printf("Connected\n");
 
-        is_connected = true;
+        
     }
+/*
+    rc = ntpGetTime(ntp);
 
-    ntpGetTime(ntp);
+    if(rc != 0) 
+    {
+        printf("\nGet time error %d\n",rc);
+        
+        reset_esp  = 0;
 
+        is_connected = false;
+
+        ThisThread::sleep_for(2s);
+
+        goto reconnect;
+
+    } 
+*/
     // Use with DNS
-    rc =  esp.gethostbyname("test.mosquitto.org", &MQTTBroker, NSAPI_IPv4,"esp");
+    rc =  esp.gethostbyname("broker.hivemq.com", &MQTTBroker, NSAPI_IPv4,"esp");
 
     if (rc != 0)
     {
@@ -151,12 +185,16 @@ reconnect:
     {
         printf("\nSocket Open error %d\n", rc);
 
+       goto reconnect;
+
     }
 
     if ((rc = socket.connect(MQTTBroker)) != 0) 
     {
 
         printf("\nBroker Connection error %d\n", rc);
+
+        goto reconnect;
     }
 
     if ((rc = client.connect(data)) != 0) 
@@ -178,6 +216,7 @@ reconnect:
     {
 
         printf("rc from valves subscribe is %d\r\n", rc);
+       // goto reconnect;
 
     }
 
@@ -185,6 +224,7 @@ reconnect:
       0) 
     {
         printf("rc from days subscribe is %d\r\n", rc);
+       // goto reconnect;
 
     }
 
@@ -192,6 +232,7 @@ reconnect:
                              messageArrived)) != 0) 
     {
         printf("rc from manual subscribe is %d\r\n", rc);
+        //goto reconnect;
 
     }
 
@@ -201,6 +242,7 @@ reconnect:
     {
 
         printf("rc from start_times subscribe is %d\r\n", rc);
+       // goto reconnect;
 
     }
 
@@ -209,6 +251,7 @@ reconnect:
     {
 
         printf("rc from weather subscribe is %d\r\n", rc);
+        //goto reconnect;
 
     }
     if ((rc = client.subscribe("controller1/budget", MQTT::QOS0,
@@ -216,6 +259,7 @@ reconnect:
     {
 
         printf("rc from budget subscribe is %d\r\n", rc);
+       // goto reconnect;
 
     }
 
@@ -225,16 +269,22 @@ reconnect:
 //   msg.retained = true;
 //   msg.dup = false;
 //
+    is_connected = true;
+  
     while (1) 
     {
 
         rc = client.yield(500);
 
-        if (rc < 0) 
+       int rc2 =esp.get_connection_status();
+
+        if ( rc2 > 1 || rc != 0) 
         {
             is_connected = false;
 
-            printf("rc from yield is %d\r\n", rc);
+            printf("connection status is %d\r\n", rc2);
+
+            printf("yield is %d\r\n", rc);
 
             client.disconnect();
 
@@ -247,7 +297,9 @@ reconnect:
             ThisThread::sleep_for(2s);
 
             goto reconnect;
+
         }
+
 
         //publish_data(buffer ,msg, client);
 

@@ -79,24 +79,28 @@ void publish_data (char * buffer,  MQTT::Message msg, MQTTClient client)
 
 */
 
-void ntpGetTime(NTPClient ntp) 
+int ntpGetTime(NTPClient ntp) 
 {
 
-    ntp.set_server("0.gr.pool.ntp.org", 123);
-
     time_t timestamp;
+
+    int retries = 2;
+
+    ntp.set_server("0.gr.pool.ntp.org", 123);
 
 ntp_retry:
 
     int rc = ntp.get_timestamp(timestamp);
 
-    if (rc < 0) 
+    if (rc < 0 && retries > 0) 
     {
         printf("An error occurred when getting the time. Code: %d\r\n", rc);
         
+        retries--;
+
         goto ntp_retry;
     } 
-    else 
+    else if (rc ==0)
     {
         set_time(timestamp);
 
@@ -111,6 +115,13 @@ ntp_retry:
         set_time(timestamp);
 
         printf("Current time is %s\r\n", ctime(&timestamp));
+
+        return 0;
+    }
+    else 
+    {
+        return -1;
+    
     }
 }
 
