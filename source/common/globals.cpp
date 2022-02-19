@@ -31,6 +31,7 @@ int water_budget[] = {100,100,100,100,100,100,100,100,100,100,100,100};
 
 int month;
 
+char* location;
 
   volatile int cycle; //each start time
   volatile int valve; 

@@ -533,7 +533,11 @@ void display()
 
                     tft.locate(285,100);
 
-                    tft.printf("Athens");
+                    tft.printf("           ");
+
+                    tft.locate(285,100);
+
+                    tft.printf("%.12s",location);
 
                     tft.locate(300,130);
 

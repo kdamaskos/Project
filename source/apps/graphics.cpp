@@ -87,7 +87,7 @@ void update_wifi_icon(bool is_connected)
     if (is_connected)
     {
 
-        tft.printf("%.10s", ssid);
+        tft.printf("%s", ssid);
 
         tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi);
 

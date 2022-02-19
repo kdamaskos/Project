@@ -6,6 +6,8 @@
 
 #define ESP_TX_PIN D8
 #define ESP_RX_PIN D2
+#define ESP_RTS_PIN PA_11
+#define ESP_CTS_PIN PA_12
 
 #define EXP_I2C_SDA     D14
 #define EXP_I2C_SCL     D15

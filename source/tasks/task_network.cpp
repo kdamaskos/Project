@@ -43,9 +43,9 @@
 //-3020,     /*!< device is busy and cannot accept new operation */
 
 
-DigitalInOut reset_esp(RESET_ESP);
+//DigitalInOut reset_esp(RESET_ESP);
 
-DigitalInOut power_esp(PA_11);
+DigitalInOut esp_rts(PA_11);
 
 
 bool is_connected;
@@ -60,8 +60,18 @@ void check()
 {
     is_connected = false;
 }
+
+
 void internet() 
 {
+    char ssid1[] = "dimdamas";
+    char psw1[] = "damas61311";
+
+    ssid  = ssid1;
+    psw = psw1;
+
+    esp_rts.mode(PullDown);
+
 
    //server();
 
@@ -92,20 +102,21 @@ reconnect:
 
     socket.close();
 
-    reset_esp  = 0;
+   // reset_esp  = 0;
 
     is_connected = false;
 
     ThisThread::sleep_for(1s);
 
-    power_esp = 1;
+    //power_esp = 1;
 
-    reset_esp  = 1;
+    //reset_esp  = 1;
 
     ThisThread::sleep_for(1s);
 
-    //int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-    int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+
+    int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+    //int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
    //int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
 
    ThisThread::sleep_for(2s);
@@ -130,19 +141,17 @@ reconnect:
 
         signal = esp.get_rssi ();
 
-        printf("Connected\n");
+        printf("Connected : %s , %s \n",ip_adress,mac_adress);
 
         
     }
-/*
+
     rc = ntpGetTime(ntp);
 
     if(rc != 0) 
     {
         printf("\nGet time error %d\n",rc);
-        
-        reset_esp  = 0;
-
+    
         is_connected = false;
 
         ThisThread::sleep_for(2s);
@@ -150,7 +159,7 @@ reconnect:
         goto reconnect;
 
     } 
-*/
+
     // Use with DNS
     rc =  esp.gethostbyname("broker.hivemq.com", &MQTTBroker, NSAPI_IPv4,"esp");
 
@@ -162,7 +171,7 @@ reconnect:
 
         esp.disconnect();
 
-        reset_esp  = 0;
+       // reset_esp  = 0;
 
         ThisThread::sleep_for(2s);
 
@@ -202,7 +211,7 @@ reconnect:
 
         printf("Client Connection error %d\n", rc);
 
-        reset_esp  = 0;
+        //reset_esp  = 0;
 
         ThisThread::sleep_for(2s);
 
@@ -292,7 +301,7 @@ reconnect:
 
             socket.close();
 
-            reset_esp  = 0;
+            //reset_esp  = 0;
 
             ThisThread::sleep_for(2s);
 

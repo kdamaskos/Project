@@ -124,6 +124,12 @@ void deserialize(char *ret, int ln )
                 start_times[i][1][j] = atoi(ret+1);
                 
                 ret = strchr(ret, ',');
+
+                if ( atoi(ret+1) == 0 ) 
+                {
+                    start_times[i][1][j] = -1;
+                }
+
             }
         }
 
@@ -198,6 +204,28 @@ void deserialize(char *ret, int ln )
         }
 
         weather[i] = NULL;
+
+        weather_refresh = true;
+
+    }
+    else if (ret[2] == 'w') 
+    {
+
+        ret = strchr(ret, '[') + 3;
+
+        for (i = 0; i < 12; i++) 
+        {
+            
+            water_budget[i] = atoi(ret);
+
+            ret = strchr(ret, '[') + 2;
+        }
+
+        location = ret;
+
+        char *end = strstr(location,"\"");
+
+        end[0] = NULL;
 
         weather_refresh = true;
 

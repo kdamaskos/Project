@@ -56,6 +56,9 @@ extern EventFlags event_flag;
 
 extern char *ssid,*psw;
 
+
+extern char* location;
+
 //display
 extern volatile int options_submenu ;
 extern volatile int programs_submenu ;

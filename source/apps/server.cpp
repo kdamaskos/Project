@@ -326,7 +326,7 @@ void server()
 
             end[0] = NULL;
 
-            printf("\n\n server %d ssid= \"%s\" %d psw = \"%s\"  \n\n",strlen(ssid), ssid, strlen(psw),psw);
+            printf("\n\n ssid= \"%s\"  psw = \"%s\"  \n\n", ssid,psw);
 
             handleRequest(&serial_port,linkId,UPDATE_DATA);
 
