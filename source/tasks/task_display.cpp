@@ -31,7 +31,7 @@ extern bool rain_refresh;
 
 extern bool is_raining;
 
-extern char *ip_adress, *mac_adress;
+extern char ip_address[], mac_address[];
 
 extern int signal;
 
@@ -826,13 +826,13 @@ void display()
 
                             tft.locate(200, 170);
 
-                            tft.printf("%s",ip_adress);
-                            printf(" ip =%s",ip_adress);
+                            tft.printf("%s",ip_address);
+                            printf(" ip =%s",ip_address);
 
                             tft.locate(200, 210);
 
-                            tft.printf("%s",mac_adress);
-                            printf("mac = %s",mac_adress);
+                            tft.printf("%s",mac_address);
+                            printf("mac = %s",mac_address);
 
                             tft.locate(200, 250);
 

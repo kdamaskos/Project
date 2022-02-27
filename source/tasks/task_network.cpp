@@ -51,7 +51,8 @@ DigitalInOut esp_rts(PA_11);
 bool is_connected;
 
 
-char *ip_adress, *mac_adress;
+char ip_address[30];
+char mac_address[30];
 
 int signal;
 
@@ -135,13 +136,13 @@ reconnect:
     {
         esp.get_ip_address(&deviceIP);
 
-        strcmp(ip_adress,deviceIP.get_ip_address());
+        strcpy(ip_address,deviceIP.get_ip_address());
 
-        strcmp(mac_adress,esp.get_mac_address());
+        strcpy(mac_address,esp.get_mac_address());
 
         signal = esp.get_rssi ();
 
-        printf("Connected : %s , %s \n",ip_adress,mac_adress);
+        printf("Connected : %s , %s \n",ip_address,mac_address);
 
         
     }

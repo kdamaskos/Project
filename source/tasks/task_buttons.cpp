@@ -474,6 +474,7 @@ void buttons()
 
                                     program++;
                                 }
+                                
 
                                 break;
 
@@ -682,7 +683,7 @@ void buttons()
 
                                     program--;
                                 }
-
+                                
 
                                 break;
 
@@ -868,6 +869,7 @@ void buttons()
         }//switch (action) {
 
         event_flag.set(REFRESH_DISPLAY);
+
         ThisThread::sleep_for(50ms);
 
     }//while(1)
