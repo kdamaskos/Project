@@ -1,0 +1,54 @@
+{
+    "name": "mbed-mqtt",
+    "config": {
+           "max-packet-size": {
+            "help": "Max serialized MQTT packet size, set by template parameter in paho library.",
+            "value": "1000"
+        },
+        "max-connections": {
+            "help": "Max simultaneous connections, set by template parameter in paho library.",
+            "value": "10"
+        },
+ 
+        "esp-rx-pin": {
+            "help": "ESP8266 module RX pin",
+            "value": "D2"
+        },
+        "esp-tx-pin": {
+            "help": "ESP8266 module TX pin",
+            "value": "D8"
+        },
+        "mqtt-id": {
+            "help": "MQTT Client id",
+            "value": "\"MUCH_UNIQUE_ID\""
+        },
+        "mqtt-broker-ip": {
+            "help": "MQTT Broker host ip.",
+            "value": "\"CHANGE_IF_USE_BROKER_IP\""
+        },
+      "mqtt-broker-hostname": {
+            "help": "MQTT Broker resolvable hostname.",
+            "value": "\"broker.hivemq.com\""
+        },
+        "mqtt-broker-port": {
+            "help": "MQTT Broker port",
+            "value": "1883"
+        },
+        "mqtt-topic": {
+            "help": "MQTT topic to publish",
+            "value": "\"test\""
+        }
+    },
+    "target_overrides": {
+        "*": {
+            "platform.stdio-convert-newlines": true,
+            "esp8266.provide-default" : true,
+            "esp8266.tx" : "D8",
+            "esp8266.rx" : "D2",
+            "mbed-mqtt.max-connections": "10",
+            "mbed-mqtt.max-packet-size": "1024"
+        }
+    }
+
+}
+
