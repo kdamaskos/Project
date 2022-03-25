@@ -497,7 +497,7 @@ void buttons()
 
                                     start_times[cycle][1][program] += 1;
 
-                                    if (start_times[cycle][1][program] > 60) 
+                                    if (start_times[cycle][1][program] > 59) 
                                     {
 
                                         start_times[cycle][1][program] = 0;

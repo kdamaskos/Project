@@ -1,8 +1,6 @@
 // Library to use https://github.com/ARMmbed/mbed-mqtt
 #include "mbed.h"
 
-#include "main.h"
-
 #include "tasks/include/task_display.h"
 
 #include "tasks/include/task_sensors.h"
@@ -49,7 +47,7 @@ int main()
     while (1) 
     {
 
-        ThisThread::sleep_for(10000s);
+        ThisThread::sleep_for(100s);
 
     }
 }

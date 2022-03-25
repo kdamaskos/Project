@@ -73,7 +73,6 @@ void internet()
 
     esp_rts.mode(PullDown);
 
-
    //server();
 
     ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
@@ -88,8 +87,6 @@ void internet()
     TCPSocket socket;
 
     MQTTClient client(&socket);
-
-   // thread23.start(callback(weather_retrieve_task));
 
     printf("\nConnecting wifi..\n");
 

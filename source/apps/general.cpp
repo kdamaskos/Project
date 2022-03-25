@@ -170,56 +170,59 @@ bool calculate_next_water(int *next_water_hour,int *next_water_minute, int *next
    
             for (int j = 0; j < TOTAL_STARTS; j++) 
             {
-                // if water today
-                if ( week_days[next_day][i] && k == 0)
+                if (start_times[j][1][i] != -1)
                 {
-                    if( start_times[j][0][i] == t->tm_hour && start_times[j][1][i] < next_water_minute_2 && start_times[j][1][i] > t->tm_min  )
+                    // if water today
+                    if ( week_days[next_day][i] && k == 0)
                     {
+                        if( start_times[j][0][i] == t->tm_hour && start_times[j][1][i] < next_water_minute_2 && start_times[j][1][i] > t->tm_min  )
+                        {
+                            
+                            next_water_minute_2 = start_times[j][1][i];
+    
+                            *next_water_hour = start_times[j][0][i];
+    
+                            *next_water_minute = start_times[j][1][i];
+    
+                            *next_water_day = t->tm_wday;
+    
+                            *next_water_program = i;
+    
+                        }
+                        else if ( (start_times[j][0][i] < *next_water_hour &&  start_times[j][0][i] > t->tm_hour ) ||
+                        ( start_times[j][0][i] == *next_water_hour &&  start_times[j][1][i] < *next_water_minute  &&  start_times[j][0][i] > t->tm_hour)  ) 
+                        {     
                         
-                        next_water_minute_2 = start_times[j][1][i];
-
-                        *next_water_hour = start_times[j][0][i];
-
-                        *next_water_minute = start_times[j][1][i];
-
-                        *next_water_day = t->tm_wday;
-
-                        *next_water_program = i;
-
-                    }
-                    else if ( (start_times[j][0][i] < *next_water_hour &&  start_times[j][0][i] > t->tm_hour ) ||
-                    ( start_times[j][0][i] == *next_water_hour &&  start_times[j][1][i] < *next_water_minute  &&  start_times[j][0][i] > t->tm_hour)  ) 
-                    {     
-
+                            
+                            *next_water_hour = start_times[j][0][i];
+    
+                            *next_water_minute = start_times[j][1][i];
+    
+                            *next_water_day = t->tm_wday;
+    
+                            *next_water_program = i;
                         
-                        *next_water_hour = start_times[j][0][i];
-
-                        *next_water_minute = start_times[j][1][i];
-
-                        *next_water_day = t->tm_wday;
-
-                        *next_water_program = i;
-                    
-                    }
-   
-                }// if water next day
-                else if( week_days[next_day][i] )
-                {
-                                        
-                    if ( (start_times[j][0][i] < *next_water_hour) || 
-                    (start_times[j][0][i] == *next_water_hour && start_times[j][1][i] < *next_water_minute)) 
-                    {      
+                        }
+    
+                    }// if water next day
+                    else if( week_days[next_day][i] )
+                    {
+                                            
+                        if ( (start_times[j][0][i] < *next_water_hour) || 
+                        (start_times[j][0][i] == *next_water_hour && start_times[j][1][i] < *next_water_minute)) 
+                        {      
+                            
+                            *next_water_hour = start_times[j][0][i];
+    
+                            *next_water_minute = start_times[j][1][i];
+    
+                            *next_water_day = next_day;
+    
+                            *next_water_program = i;
                         
-                        *next_water_hour = start_times[j][0][i];
-
-                        *next_water_minute = start_times[j][1][i];
-
-                        *next_water_day = next_day;
-
-                        *next_water_program = i;
-                    
+                        }
+    
                     }
-
                 }
 
             }
