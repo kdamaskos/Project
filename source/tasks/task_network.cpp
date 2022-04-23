@@ -73,7 +73,7 @@ void internet()
 
     esp_rts.mode(PullDown);
 
-  // server();
+  server();
 
     ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
     
@@ -113,8 +113,8 @@ reconnect:
     ThisThread::sleep_for(1s);
 
 
-   // int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-  int rc = esp.connect("JimDamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+ int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+  //int rc = esp.connect("JimDamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
    //int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
 
    ThisThread::sleep_for(2s);

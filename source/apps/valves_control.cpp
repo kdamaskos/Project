@@ -190,7 +190,7 @@ void autoValves()
       shift++;
     }
 
-    pcf0.WriteByte(data);
+    pcf0.WriteByte(~data);
 
     data = 0b00000000;
 
@@ -214,7 +214,7 @@ void autoValves()
         shift++;
     }
 
-    pcf1.WriteByte(data);
+    pcf1.WriteByte(~data);
 
     data = 0b00000000;
 
@@ -240,7 +240,7 @@ void autoValves()
 
     }
 
-    pcf2.WriteByte(data);
+    pcf2.WriteByte(~data);
 
     data = 0b00000000;
 
@@ -265,7 +265,7 @@ void autoValves()
         
     }
     
-    pcf3.WriteByte(data);
+    pcf3.WriteByte(~data);
 
     data = 0b00000000;
 
@@ -289,7 +289,7 @@ void autoValves()
         shift++;
     }
 
-    pcf4.WriteByte(data);
+    pcf4.WriteByte(~data);
 
     function_mutex.unlock();
     
@@ -300,15 +300,15 @@ void closeValves()
   
   function_mutex.lock();
 
-  pcf0.WriteByte(0x00);
+  pcf0.WriteByte(0xff);
 
-  pcf1.WriteByte(0x00);
+  pcf1.WriteByte(0xff);
 
-  pcf2.WriteByte(0x00);
+  pcf2.WriteByte(0xff);
 
-  pcf3.WriteByte(0x00);
+  pcf3.WriteByte(0xff);
 
-  pcf4.WriteByte(0x00);
+  pcf4.WriteByte(0xff);
 
   function_mutex.unlock();
   
