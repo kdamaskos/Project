@@ -19,6 +19,8 @@
 
 #include "include/task_display.h"
 
+#include "config/pins_config.h"
+
 
 const char *WEEK_DAY[] = {"Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"};
 
@@ -28,10 +30,9 @@ const char *MONTHS[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","O
 
 
 
-ILI9486 tft(PAR_8, PortC, A3, D5, A2, A1, A0,
+ILI9486 tft(PAR_8, PortC, PIN_CS, PIN_RST, PIN_DC, PIN_WR, PIN_RD,
             "myLCD"); /// isplayproto, port, CS, reset, DC, WR, RD, LCDSIZE_X,
                       /// LCDSIZE_Y, name
-
 
 
 

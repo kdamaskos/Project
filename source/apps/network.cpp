@@ -38,46 +38,9 @@ void messageArrived(MQTT::MessageData &md)
     }
 }
 
-/*
 
-void publish_data (char * buffer,  MQTT::Message msg, MQTTClient client)
-{
-    
-    if (publish_valves) {
-          serialize(0, buffer);
-          msg.payload = (void *)buffer;
-          msg.payloadlen = strlen(buffer);
-          client.publish("controller1/newValves", msg);
-          publish_valves = false;
-          printf("%s\n", buffer);
-        }
-        if (publish_starts) {
-          serialize(1, buffer);
-          msg.payload = (void *)buffer;
-          msg.payloadlen = strlen(buffer);
-          client.publish("controller1/start_times", msg);
-          publish_starts = false;
-          printf("%s\n", buffer);
-        }
-        if (publish_days) {
-          serialize(2, buffer);
-          msg.payload = (void *)buffer;
-          msg.payloadlen = strlen(buffer);
-          client.publish("controller1/days", msg);
-          publish_days = false;
-          printf("%s\n", buffer);
-        }
-        if (publish_manual) {
-          serialize(3, buffer);
-          msg.payload = (void *)buffer;
-          msg.payloadlen = strlen(buffer);
-          client.publish("controller1/manual", msg);
-          publish_manual = false;
-          printf("%s\n", buffer);
-        }
-}
 
-*/
+
 
 int ntpGetTime(NTPClient ntp) 
 {

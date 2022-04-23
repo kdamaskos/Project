@@ -54,7 +54,7 @@ void manualValves()
         shift++;
     }
 
-    pcf0.WriteByte(data);
+    pcf0.WriteByte(~data);
 
     // 8-15
     data = 0b00000000;
@@ -80,7 +80,7 @@ void manualValves()
         shift++;
     }
 
-    pcf1.WriteByte(data);
+    pcf1.WriteByte(~data);
     // 16-23
     data = 0b00000000;
 
@@ -104,7 +104,7 @@ void manualValves()
         shift++;
     }
 
-    pcf2.WriteByte(data);
+    pcf2.WriteByte(~data);
     // 24-31
     data = 0b00000000;
 
@@ -128,7 +128,7 @@ void manualValves()
         shift++;
     }
 
-    pcf3.WriteByte(data);
+    pcf3.WriteByte(~data);
     // 32-39
 
     data = 0b00000000;
@@ -153,7 +153,7 @@ void manualValves()
         shift++;
     }
 
-    pcf4.WriteByte(data);
+    pcf4.WriteByte(~data);
 
     function_mutex.unlock();
     

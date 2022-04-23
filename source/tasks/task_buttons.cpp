@@ -8,6 +8,7 @@
 #include "globals.h"
 
 #include "string"
+#include "apps/include/valves_control.h"
 
 #define BACK (1UL << 0)
 #define NEXT (1UL << 1)
@@ -133,6 +134,10 @@ void buttons()
                         {
 
                             menu = MENU;
+                            
+                            publish_valves = 1;
+                            publish_starts = 1;
+                            publish_days = 1;
 
                         } 
                         else 
@@ -145,6 +150,8 @@ void buttons()
 
                     case AUTO:
 
+                        closeValves(); 
+
                         is_watering = false;
 
                         menu = MENU;
@@ -153,11 +160,18 @@ void buttons()
 
                     case MANUAL:
 
+                        closeValves(); 
+
                         menu = MENU;
                         
                         break;
 
                     case OPTIONS:
+
+                        if(options_submenu == WATER_BUDGET)
+                        {
+                            publish_water_budget = 1;
+                        }
 
                         if (options_submenu == SELECT_OPTION)
                         {

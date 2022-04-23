@@ -68,7 +68,7 @@ extern  volatile int select_menu;
 extern  volatile int select_submenu;
 
 
-extern  bool refresh_display,refresh_elapsed_time,refresh_watering_valves, publish_valves, publish_starts, publish_days, publish_manual; 
+extern  bool refresh_display,refresh_elapsed_time,refresh_watering_valves, publish_valves, publish_starts, publish_water_budget,publish_days, publish_manual; 
 
 
 extern  volatile int durations[TOTAL_ZONES][TOTAL_PROGRAMS]; // valvei = {x,duration,program} x is used to auto run 

@@ -73,7 +73,7 @@ void internet()
 
     esp_rts.mode(PullDown);
 
-   //server();
+  // server();
 
     ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
     
@@ -113,8 +113,8 @@ reconnect:
     ThisThread::sleep_for(1s);
 
 
-    int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-    //int rc = esp.connect("dimdamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+   // int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+  int rc = esp.connect("JimDamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
    //int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
 
    ThisThread::sleep_for(2s);
@@ -217,7 +217,6 @@ reconnect:
 
     }
 
-
     if ((rc = client.subscribe("controller1/valves", MQTT::QOS0,
                              messageArrived)) != 0) 
     {
@@ -270,14 +269,16 @@ reconnect:
 
     }
 
-//   char buffer[500];
-//   MQTT::Message msg;
-//   msg.qos = MQTT::QOS1;
-//   msg.retained = true;
-//   msg.dup = false;
-//
+   char buffer[500];
+   MQTT::Message msg;
+   msg.qos = MQTT::QOS1;
+   msg.retained = true;
+   msg.dup = false;
+
+
     is_connected = true;
-  
+
+
     while (1) 
     {
 
@@ -308,7 +309,47 @@ reconnect:
         }
 
 
-        //publish_data(buffer ,msg, client);
+       if (publish_valves) 
+        {
+
+          serialize(0, buffer);
+          msg.payload = (void *)buffer;
+          msg.payloadlen = strlen(buffer);
+          client.publish("controller1/valves/dam", msg);
+          publish_valves = false;
+          printf("\nbuffer  = %s\n\n", buffer);
+        }
+
+        if (publish_starts) 
+        {
+          serialize(1, buffer);
+          msg.payload = (void *)buffer;
+          msg.payloadlen = strlen(buffer);
+          client.publish("controller1/start_times/dam", msg);
+          publish_starts = false;
+          printf("\nbuffer  = %s\n\n", buffer);
+        }
+
+        if (publish_days) 
+        {
+          serialize(2, buffer);
+          msg.payload = (void *)buffer;
+          msg.payloadlen = strlen(buffer);
+          client.publish("controller1/days/dam", msg);
+          publish_days = false;
+          printf("\nbuffer  = %s\n\n", buffer);
+        }
+
+        if (publish_water_budget) 
+        {
+          serialize(4, buffer);
+          msg.payload = (void *)buffer;
+          msg.payloadlen = strlen(buffer);
+          client.publish("controller1/budget/dam", msg);
+          publish_water_budget = false;
+          printf("\nbuffer  = %s\n\n", buffer);
+        }
+
 
         // Sleep time must be less than TCP timeout
         // TODO: check if socket is usable before publishing

@@ -18,61 +18,109 @@
 *   topic manual :   "m":[1(manual or auto),m1,m2,...mn]  mi = 0 or 1
 *
 */
-/*
+
 void serialize(int topic, char *buffer) 
 {
     int i, j;
 
-    char temp[15];
+    char temp[30];
 
-    sprintf(buffer, "u");
 
-    switch (topic) {
-    case 0:
-    strcat(buffer, "{\"v\":[");
-    for (i = 0; i < TOTAL_ZONES; i++) {
-      sprintf(temp, "%d,%d,%d,", durations[i][1], durations[i][2], rain[i]);
-      strcat(buffer, temp);
+    switch (topic) 
+    {
+        case 0:
+            sprintf(buffer, "{\"v\":[");
+
+            for (i = 0; i < TOTAL_ZONES; i++) 
+            {
+                sprintf(temp, "[%d,%d],",program,  durations[i][program]);
+                strcat(buffer, temp);
+            }
+
+            buffer[strlen(buffer) - 1] = ']';
+            strcat(buffer, "}");
+
+            break;
+
+        case 1:
+
+            sprintf(buffer, "{");
+
+            sprintf(temp, "\"s\":[");
+
+            strcat(buffer, temp);
+
+            for (j = 0; j < TOTAL_PROGRAMS; j++) 
+            {
+
+                for (i = 0; i < TOTAL_STARTS; i++) 
+                {
+
+
+                    if (start_times[i][1][j] == -1) 
+                    {
+                        sprintf(temp, "[\"%02d:00\",0],", start_times[i][0][j]);
+                    }  
+                    
+                    sprintf(temp, "[\"%02d:%02d\", 1],", start_times[i][0][j], start_times[i][1][j]);
+                    strcat(buffer, temp);
+
+                }
+            }
+            buffer[strlen(buffer) - 1] = ']';
+            strcat(buffer, "}");
+
+            break;
+
+        case 2:
+
+            sprintf(buffer, "{");
+            sprintf(temp, "\"d\":[");
+            strcat(buffer, temp);
+            for (i = 0; i < TOTAL_PROGRAMS; i++) 
+            {
+                strcat(buffer, "[");
+                for (j = 0; j < 7; j++) 
+                {
+                    sprintf(temp, "%d,", week_days[j][i]);
+                    strcat(buffer, temp);
+                }
+                    sprintf(temp, "%d", i);
+                    strcat(buffer, temp);
+                
+                strcat(buffer, "],");
+
+            }   
+            buffer[strlen(buffer) - 1] = ']';
+            strcat(buffer, "}");
+
+            break;
+ 
+
+        case 4:
+        
+            sprintf(buffer, "{");
+            sprintf(temp, "\"w\":[");
+            strcat(buffer, temp);
+            for (i = 0; i < 12; i++) 
+            {
+                strcat(buffer, "[");
+  
+                    sprintf(temp, "[\"%d\",%d],",water_budget[i], i);
+                    strcat(buffer, temp);
+                
+
+
+            }   
+            buffer[strlen(buffer) - 1] = ']';
+            strcat(buffer, "}");
+
+
+
+            break;
     }
-
-    buffer[strlen(buffer) - 1] = ']';
-    strcat(buffer, "}");
-    break;
-  case 1:
-    strcat(buffer, "{");
-    for (i = 0; i < TOTAL_STARTS; i++) {
-      sprintf(temp, "\"s%d\":[", i);
-      strcat(buffer, temp);
-      for (j = 0; j < TOTAL_PROGRAMS; j++) {
-        sprintf(temp, "%d,%d,", start_times[i][0][j], start_times[i][1][j]);
-        strcat(buffer, temp);
-      }
-      buffer[strlen(buffer) - 1] = ']';
-      strcat(buffer, ",");
-    }
-    sprintf(temp, "\"w\":[%d]}", water_budget);
-    strcat(buffer, temp);
-    break;
-  case 2:
-    strcat(buffer, "{");
-    for (i = 0; i < TOTAL_PROGRAMS; i++) {
-      sprintf(temp, "\"d%d\":[", i);
-      strcat(buffer, temp);
-      for (j = 0; j < 7; j++) {
-        sprintf(temp, "%d,", week_days[j][i]);
-        strcat(buffer, temp);
-      }
-      buffer[strlen(buffer) - 1] = ']';
-      strcat(buffer, ",");
-    }
-    buffer[strlen(buffer) - 1] = '}';
-
-    break;
-  case 3:
-    break;
-  }
 }
-*/
+
 // parsing json values in according variables
 void deserialize(char *ret, int ln ) 
 {

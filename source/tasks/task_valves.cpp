@@ -1,5 +1,5 @@
 
-
+#include "apps/include/valves_control.h"
 #include "include/task_valves.h"
 #include "task_buttons.h"
 #include "globals.h"
@@ -61,6 +61,8 @@ void valves_control()
                         }
                         if (is_watering)
                         {
+                            //autoValves();
+
                             break;
                         }
                     }
@@ -75,7 +77,7 @@ void valves_control()
                     
                     if (current_time > water_duration.total*60* water_budget[t->tm_mon] / 100 + start_time)
                     {
-                        for (int i = 0; i < TOTAL_STARTS; i++)
+                        for (int i = 0; i < TOTAL_ZONES; i++)
                         {
                             auto_valves[i] = false;
                         }
@@ -114,6 +116,8 @@ void valves_control()
 
                         time_shift ++;
 
+                        autoValves();
+
                     }
 
 
@@ -127,7 +131,10 @@ void valves_control()
 
             case MANUAL:
 
+                manualValves();
+
                 event_flag.wait_any(MANUAL_REFRESH);
+                
 
 
                 break;

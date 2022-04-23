@@ -13,7 +13,7 @@ volatile int select_submenu;
  
 
 
-bool refresh_elapsed_time,refresh_watering_valves,refresh_display, publish_valves, publish_starts, publish_days, publish_manual; 
+bool refresh_elapsed_time,refresh_watering_valves,refresh_display, publish_valves, publish_starts, publish_days, publish_water_budget,publish_manual; 
 
   volatile int durations[TOTAL_ZONES][TOTAL_PROGRAMS]; // valvei = {x,duration,program} x is used to auto run 
   volatile int start_times[TOTAL_STARTS][2][TOTAL_PROGRAMS]; 
