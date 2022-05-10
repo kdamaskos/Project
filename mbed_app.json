@@ -43,6 +43,7 @@
         "*": {
             "platform.stdio-convert-newlines": true,
             "esp8266.provide-default" : true,
+
             "esp8266.tx" : "D8",
             "esp8266.rx" : "D2",
             "mbed-mqtt.max-connections": "10",

@@ -14,13 +14,13 @@
 #include "apps/include/general.h"
 
 
-Thread thread1(osPriorityNormal, 10 * 1024);
+Thread thread1(osPriorityNormal, 8 * 1024);
 
 Thread thread2(osPriorityNormal+9);
 
 Thread thread3(osPriorityNormal+5);
 
-Thread thread4(osPriorityNormal+15);
+Thread thread4(osPriorityNormal, 2* 1024 );
 
 Thread thread5(osPriorityNormal+10);
 

@@ -1,8 +1,10 @@
 #include "globals.h"
+#include <cstdint>
 
 //
 
  EventFlags event_flag;
+
 
 
 volatile int menu;
@@ -11,6 +13,15 @@ volatile int programs_submenu = SELECT_PROGRAM;
 volatile int select_menu;
 volatile int select_submenu;
  
+
+ volatile bool wifi_connect = true;
+
+volatile int wifi_setup_selection = WIFI_SSID;
+volatile char string_char = 33;
+volatile char char_pos = 0;
+
+volatile int options_wifi_submenu_select = WIFI_SETUP;
+volatile int options_wifi_submenu = WIFI_SUBMENU_SELECT;
 
 
 bool refresh_elapsed_time,refresh_watering_valves,refresh_display, publish_valves, publish_starts, publish_days, publish_water_budget,publish_manual; 
@@ -37,7 +48,8 @@ char* location;
   volatile int valve; 
   volatile int day; 
   volatile int program;
-  volatile int is_watering;
+  volatile bool is_watering=false;
+bool refresh_rain_values;
 
   volatile int timezone;
   volatile float supply_flow = 50;

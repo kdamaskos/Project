@@ -65,15 +65,12 @@ void check()
 
 void internet() 
 {
-    char ssid1[] = "dimdamas";
-    char psw1[] = "damas61311";
-
-    ssid  = ssid1;
-    psw = psw1;
 
     esp_rts.mode(PullDown);
 
-  server();
+   server();
+
+    printf("network task  %s   %s\n", ssid, psw);
 
     ESP8266Interface esp(ESP_TX_PIN, ESP_RX_PIN);
     
@@ -113,8 +110,15 @@ reconnect:
     ThisThread::sleep_for(1s);
 
 
- int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
-  //int rc = esp.connect("JimDamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
+    while (wifi_connect != true) 
+    {
+        ThisThread::sleep_for(1s);
+    }
+    
+
+    
+    int rc = esp.connect(ssid, psw, NSAPI_SECURITY_WPA_WPA2);
+    //int rc = esp.connect("JimDamas", "damas61311", NSAPI_SECURITY_WPA_WPA2);
    //int rc = esp.connect("realme", "12345678", NSAPI_SECURITY_WPA_WPA2);
 
    ThisThread::sleep_for(2s);
@@ -286,7 +290,7 @@ reconnect:
 
        int rc2 =esp.get_connection_status();
 
-        if ( rc2 > 1 || rc != 0) 
+        if ( rc2 > 1 || rc != 0 || wifi_connect != true) 
         {
             is_connected = false;
 

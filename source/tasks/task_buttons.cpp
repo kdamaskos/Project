@@ -168,12 +168,19 @@ void buttons()
 
                     case OPTIONS:
 
-                        if(options_submenu == WATER_BUDGET)
+                        if (options_wifi_submenu != WIFI_SUBMENU_SELECT )
                         {
+
+                            options_wifi_submenu = WIFI_SUBMENU_SELECT;
+
+                            options_wifi_submenu_select = WIFI_SETUP;
+                        }
+                        else if(options_submenu == WATER_BUDGET)
+                        {
+                            options_submenu = SELECT_OPTION;
                             publish_water_budget = 1;
                         }
-
-                        if (options_submenu == SELECT_OPTION)
+                        else if (options_submenu == SELECT_OPTION)
                         {
                             menu = MENU;
                         }
@@ -182,6 +189,8 @@ void buttons()
                             options_submenu = SELECT_OPTION;
 
                         }
+
+
                         
                         break;
 
@@ -213,6 +222,23 @@ void buttons()
                         break;
 
                     case OPTIONS:
+
+                        if(options_wifi_submenu == WIFI_SETUP && options_submenu == NETWORK)
+                        {
+                            wifi_setup_selection ++;
+
+                            if(wifi_setup_selection > 4)
+                            {
+                                wifi_setup_selection  = 1;
+
+                            }
+
+
+                            char_pos = 0;
+                            
+                            
+                        }
+                        
 
                         break;
 
@@ -436,8 +462,61 @@ void buttons()
 
                             case NETWORK:
 
-                        
+                               switch (options_wifi_submenu) 
+                                {
+                                    case WIFI_SUBMENU_SELECT:
+                                        
+                                        if (options_wifi_submenu_select == WIFI_INFO) 
+                                        {
+                                            options_wifi_submenu = WIFI_INFO;
+                                        }
+                                        else if ( options_wifi_submenu_select == WIFI_SETUP ) 
+                                        {
+                                            options_wifi_submenu = WIFI_SETUP;
+                                        }
 
+                                        break;
+
+                                    case WIFI_SETUP:
+
+                                        if ( wifi_setup_selection == WIFI_CONNECT) 
+                                        {
+                                            wifi_connect = true;
+
+                                        }
+                                        else if( wifi_setup_selection == WIFI_DISCONNECT)
+                                        {
+                                            wifi_connect = false;
+
+                                        }
+                                        else if ( wifi_setup_selection == WIFI_SSID) 
+                                        {
+                                            if(ssid[char_pos] != NULL)
+                                            {
+                                                char_pos ++;
+                                            }
+
+                                            
+                                        }
+                                        else if(wifi_setup_selection == WIFI_PSW)
+                                        {
+
+                                            if(psw[char_pos] != NULL)
+                                            {
+                                                char_pos ++;
+                                            }
+
+                                        }
+                                        
+
+                                        break;
+
+                                    case WIFI_INFO:
+
+                                        break;
+
+                                }
+                              
                                 break;
 
                             case STATISTICS:
@@ -559,7 +638,11 @@ void buttons()
                                 else 
                                 {
 
-                                    durations[valve][program] += INTERVAL_TIME;
+                                    if (durations[valve][program]<90)
+                                    {
+                                        durations[valve][program] += INTERVAL_TIME;
+                                    }
+                                    
 
                                 }
 
@@ -646,6 +729,52 @@ void buttons()
                             
                             case NETWORK:
 
+                               switch (options_wifi_submenu) 
+                                {
+                                    case WIFI_SUBMENU_SELECT:
+                                        
+                                        options_wifi_submenu_select = WIFI_INFO;
+
+                                        break;
+
+                                    case WIFI_SETUP:
+
+                                        if( wifi_setup_selection == WIFI_SSID)
+                                        {
+                                            
+                                            if(ssid[char_pos] <32 || ssid[char_pos] > 126 && ssid[char_pos] != NULL)
+                                            {
+                                                ssid[char_pos] = 33;
+                                            } 
+                                            else if( ssid[char_pos] < 126)
+                                            {
+                                    
+                                                ssid[char_pos] ++;
+                                            }
+                                        }
+                                        else if( wifi_setup_selection == WIFI_PSW )
+                                        {    
+
+                                            if(psw[char_pos] <32 || psw[char_pos] > 126 && psw[char_pos] != NULL)
+                                            {
+                                                psw[char_pos] = 33;
+                                            } 
+                                            else if( psw[char_pos] < 126)
+                                            {
+
+                                                psw[char_pos] ++;
+                                            }
+                                            
+                                        }
+
+                                        break;
+
+                                    case WIFI_INFO:
+
+                                        break;
+
+                                }
+                              
 
                                 break;
                             
@@ -856,6 +985,62 @@ void buttons()
                                 break;
                             
                             case NETWORK:
+
+                                switch (options_wifi_submenu) 
+                                {
+                                    case WIFI_SUBMENU_SELECT:
+                                        
+                                        options_wifi_submenu_select = WIFI_SETUP;
+
+                                        break;
+
+                                    case WIFI_SETUP:
+
+                                       if( wifi_setup_selection == WIFI_SSID)
+                                        {
+
+                                            if( (ssid[char_pos] <32 || ssid[char_pos] > 126 ) && ssid[char_pos] != NULL)
+                                            {
+                                                ssid[char_pos] = 33;
+                                            } 
+                                            else if( ssid[char_pos] > 32)
+                                            {
+                                    
+                                                ssid[char_pos] --;
+                                            }
+                                            
+                                            if ( ssid[char_pos] == 32)
+                                            {
+                                                ssid[char_pos] = NULL;
+                                            }
+                                          
+                                        }else if( wifi_setup_selection == WIFI_PSW )
+                                        {    
+
+                                            if(psw[char_pos] <33 || psw[char_pos] > 126 && psw[char_pos] != NULL)
+                                            {
+                                                psw[char_pos] = 33;
+                                            } 
+                                            else if( psw[char_pos] > 33)
+                                            {
+
+                                                psw[char_pos] --;
+                                            }
+
+                                            if ( psw[char_pos] == 32)
+                                            {
+                                                psw[char_pos] = NULL;
+                                            }
+                                            
+                                        }
+
+                                        break;
+
+                                    case WIFI_INFO:
+
+                                        break;
+
+                                }
 
 
                                 break;

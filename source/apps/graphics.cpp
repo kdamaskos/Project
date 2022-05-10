@@ -99,7 +99,7 @@ void update_wifi_icon(bool is_connected)
     
         tft.foreground(Red);
 
-        tft.printf("    ");
+        tft.printf("            ");
 
         tft.Bitmap(40,10,20,16,(unsigned char *)image_data_wifi_not);
 
@@ -414,3 +414,5 @@ void wifi_info_graphics()
     tft.printf("Signal  : ");
 
 }
+
+

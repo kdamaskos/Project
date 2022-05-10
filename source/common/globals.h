@@ -34,6 +34,16 @@
 #define STATISTICS 4
 #define OFFLINE 5
 
+#define WIFI_SUBMENU_SELECT -1
+#define WIFI_SETUP 1
+#define WIFI_INFO 2
+
+#define WIFI_SSID 1
+#define WIFI_PSW 2
+#define WIFI_CONNECT 3
+#define WIFI_DISCONNECT 4
+
+
 #define SELECT_PROGRAM 0
 #define STARTS 1
 #define DAYS 2
@@ -56,10 +66,18 @@ extern EventFlags event_flag;
 
 extern char *ssid,*psw;
 
+extern volatile char ssid_char;
 
 extern char* location;
 
+
+extern volatile bool wifi_connect ;
+
+
+
 //display
+extern volatile int options_wifi_submenu_select;
+extern volatile int options_wifi_submenu;
 extern volatile int options_submenu ;
 extern volatile int programs_submenu ;
 extern volatile int menu;
@@ -85,14 +103,18 @@ extern int month;
 extern   int total_duration;
 extern  volatile int duration_remain[TOTAL_ZONES];
 
+extern bool refresh_rain_values;
 
+extern volatile int wifi_setup_selection ;
 
+extern volatile char string_char ;
+extern volatile char char_pos;
 
 extern  volatile int cycle; //each start time
 extern  volatile int valve; 
 extern  volatile int day; 
 extern  volatile int program;
-extern  volatile int is_watering;
+extern  volatile bool is_watering;
 
 extern  volatile int timezone;
 extern  volatile float supply_flow;

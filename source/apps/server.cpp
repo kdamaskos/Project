@@ -139,7 +139,7 @@ void waitFor(BufferedSerial * serial_port, char * text)
         }
     }
 
-   //printf("%s\n", s.c_str());
+   printf("%s\n", s.c_str());
 }
 
 void sendCommand(BufferedSerial * serial_port, char * cmd) 
@@ -225,7 +225,7 @@ void handleRequest(BufferedSerial * serial_port,int linkId, int page)
 
 }
 
-
+extern 
 
 void server()
 {
@@ -260,7 +260,7 @@ void server()
     waitFor(&serial_port,(char *)"OK");
     //serial_port.read(buffer, sizeof(buffer));
 
-     char buffer[500] = {0};
+     char buffer[1000] = {0};
 
     while (true) 
     {
@@ -288,7 +288,7 @@ void server()
             
         }
 
-        serial_port.read(buffer, 500);
+        serial_port.read(buffer, 600);
         
         printf("buffer = %s\n",buffer);
 
@@ -301,6 +301,7 @@ void server()
         }
         else if(strstr(buffer,":POST ") != NULL)
         {   
+
             waitFor(&serial_port,(char *)"name\":");
 
             serial_port.read(buffer, 200);
@@ -330,11 +331,11 @@ void server()
 
             handleRequest(&serial_port,linkId,UPDATE_DATA);
 
-            sendCommand(&serial_port,(char *)"AT+RST");
+           sendCommand(&serial_port,(char *)"AT+RST");
 
             waitFor(&serial_port,(char *)"OK");
 
-            break;
+           break;
 
         }
         else 

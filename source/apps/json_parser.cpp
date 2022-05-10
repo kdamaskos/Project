@@ -104,12 +104,10 @@ void serialize(int topic, char *buffer)
             strcat(buffer, temp);
             for (i = 0; i < 12; i++) 
             {
-                strcat(buffer, "[");
-  
-                    sprintf(temp, "[\"%d\",%d],",water_budget[i], i);
-                    strcat(buffer, temp);
-                
 
+  
+                sprintf(temp, "[\"%d\",%d],",water_budget[i], i);
+                strcat(buffer, temp);
 
             }   
             buffer[strlen(buffer) - 1] = ']';
@@ -153,6 +151,8 @@ void deserialize(char *ret, int ln )
 
         }
 
+        refresh_rain_values = true;
+
     } 
     else if (ret[2] == 's') 
     {
@@ -164,6 +164,12 @@ void deserialize(char *ret, int ln )
             for (i = 0; i < TOTAL_STARTS; i++) 
             {
                 ret = strchr(ret, '"');
+
+               if (  ret[1] == '"' )
+               {
+                    ret = ret +2;
+                    continue;
+               }
 
                 start_times[i][0][j] = atoi(ret+1);
             
@@ -232,7 +238,7 @@ void deserialize(char *ret, int ln )
 
         ret = strchr(ret, ':') + 1;
 
-        temperature = atoi(ret) - 273;
+        temperature = atoi(ret) ;
 
         ret = strchr(ret+1, ':') + 1;
 

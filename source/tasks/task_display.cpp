@@ -86,7 +86,7 @@ void live_info_task()
 void display() 
 {
 
-    int previous_menu = -2, previous_programs_submenu, previous_options_submenu = SELECT_OPTION, next_water_hour, next_water_min,next_water_program,next_water_day;
+    int previous_menu = -2, previous_programs_submenu, previous_options_wifi_submenu , previous_options_submenu = SELECT_OPTION, next_water_hour, next_water_min,next_water_program,next_water_day;
 
     init_graphics();
    
@@ -474,7 +474,7 @@ void display()
 
                 if (rain_refresh)
                 {
-                    if (rain_sensor) 
+                    if (!rain_sensor) 
                     {
 
                         tft.set_font((unsigned char *)Goudy_Old_Style21x19);
@@ -537,7 +537,7 @@ void display()
 
                     tft.locate(285,100);
 
-                    tft.printf("%.12s",location);
+                    tft.printf("Zurich");
 
                     tft.locate(300,130);
 
@@ -626,7 +626,7 @@ void display()
 
                         tft.set_font((unsigned char *)Arial28x28);
 
-                        tft.locate(350, 150);
+                        tft.locate(340, 150);
 
                         tft.printf("      ");
 
@@ -740,6 +740,13 @@ void display()
 
                         }
 
+                        if(refresh_rain_values)
+                        {
+
+                            refresh_rain_values = false;
+                            rain_table.populate((int *) rain);
+                        }
+
                         if (rotary_rotated)
                         {
 
@@ -801,70 +808,293 @@ void display()
 
                         if(previous_options_submenu != options_submenu)
                         {
-
+                        
                             previous_options_submenu = NETWORK;
 
-                            wifi_info_graphics();
-
-
                         }
 
-                        
-
-                        if (is_connected)
+                        switch (options_wifi_submenu) 
                         {
-                            tft.locate(200, 90);
+                            case WIFI_SUBMENU_SELECT:
 
-                            tft.foreground(Green);
 
-                            tft.printf("Connected");
+                                if(previous_options_wifi_submenu != options_wifi_submenu)
+                                {
+                                    
+                                    tft.fillrect(28 , 50, 455, 291, BACKGROUND_MAIN);
+                                
+                                    previous_options_wifi_submenu = WIFI_SUBMENU_SELECT;
 
-                            tft.locate(200, 130);
+                                }
+                                
+                                if( options_wifi_submenu_select == WIFI_SETUP )
+                                {
 
-                            tft.printf("%.10s",ssid);
-                            printf("%s",ssid);
+                                    tft.set_font((unsigned char *)Arial28x28);
 
-                            tft.locate(200, 170);
+                                    tft.background( Black);
 
-                            tft.printf("%s",ip_address);
-                            printf(" ip =%s",ip_address);
+                                    tft.foreground( White);
 
-                            tft.locate(200, 210);
+                                    tft.locate(150, 100);
 
-                            tft.printf("%s",mac_address);
-                            printf("mac = %s",mac_address);
+                                    tft.printf("WIFI SETUP");
 
-                            tft.locate(200, 250);
+                                    tft.background( White);
 
-                            tft.printf("%d db",signal);
-                        }
-                        else 
-                        {
-                            tft.locate(200, 90);
+                                    tft.foreground(Black);
 
-                            tft.foreground(Red);
+                                    tft.locate(120, 210);
 
-                            tft.printf("Not connected");
+                                    tft.printf("NETWORK INFO");
 
-                            tft.locate(200, 130);
+                                }
+                                else if( options_wifi_submenu_select == WIFI_INFO )
+                                {
 
-                            tft.printf("-");
+                                    tft.set_font((unsigned char *)Arial28x28);
 
-                            tft.locate(200, 170);
+                                    tft.background( White);
 
-                            tft.printf("-");
+                                    tft.foreground( Black);
 
-                            tft.locate(200, 210);
+                                    tft.locate(150, 100);
 
-                            tft.printf("-");
+                                    tft.printf("WIFI SETUP");
 
-                            tft.locate(200, 250);
+                                    tft.background( Black);
 
-                            tft.printf("-");
+                                    tft.foreground(White);
+
+                                    tft.locate(120, 210);
+
+                                    tft.printf("NETWORK INFO");
+                                
+                                }
+      
+                                break;
+
+                            case WIFI_SETUP:
+
+                                if(previous_options_wifi_submenu != options_wifi_submenu)
+                                {
+                                
+                                    previous_options_wifi_submenu = WIFI_SETUP;
+
+                                    tft.fillrect(28 , 50, 455, 291, BACKGROUND_MAIN);
+
+                                    tft.set_font((unsigned char *)Arial24x23);
+
+                                    tft.background( White);
+    
+                                    tft.foreground(Black);
+
+                                    tft.locate(55, 80);
+
+                                    tft.printf("Ssid: ");
+
+                                    tft.locate(150, 80);
+
+                                    tft.printf("%s",ssid);
+
+                                    tft.locate(55, 140);
+
+                                    tft.printf("Psw: ");
+
+                                    tft.locate(150, 140);
+
+                                    tft.printf("%s",psw);
+
+                                    tft.locate(55, 200);
+
+                                    tft.printf("Connect");
+
+                                    tft.locate(55, 240);
+
+                                    tft.printf("Disconnect");
+
+                                }
+
+                                tft.background( White);
+    
+                                tft.foreground(Black);
+    
+                                tft.set_font((unsigned char *)Arial24x23);
+
+                                if ( wifi_setup_selection == WIFI_SSID )
+                                {
+                                    
+
+                                    tft.locate(30, 140);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 200);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 240);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 80);
+
+                                    tft.printf(">");
+
+
+                                    tft.locate(150, 80);
+
+
+                                    tft.printf("                  ");
+
+                                    tft.locate(150, 80);
+
+                                    tft.printf("%s",ssid);
+
+                                }
+                                else if ( wifi_setup_selection == WIFI_PSW )
+                                {
+                                    
+                                    tft.locate(30, 80);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 200);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 240);
+
+                                    tft.printf(" ");
+
+
+                                    tft.locate(30, 140);
+
+                                    tft.printf(">");
+
+                                    tft.locate(150, 140);
+
+                                    tft.printf("                  ");
+
+                                    tft.locate(150, 140);
+
+                                    tft.printf("%s",psw);
+                                }
+                                else if ( wifi_setup_selection == WIFI_CONNECT)
+                                {
+
+                                    tft.locate(30, 80);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 140);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 240);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 200);
+
+                                    tft.printf(">");
+
+                                    
+                                }
+                                else if ( wifi_setup_selection == WIFI_DISCONNECT)
+                                {
+
+                                    tft.locate(30, 80);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 140);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 200);
+
+                                    tft.printf(" ");
+
+                                    tft.locate(30, 240);
+
+                                    tft.printf(">");
+ 
+                                }
+                            
+                                break;
+
+                            case WIFI_INFO:
+                    
+
+                                if(previous_options_wifi_submenu != options_wifi_submenu)
+                                {
+                                    tft.fillrect(28 , 50, 455, 291, BACKGROUND_MAIN);
+                                
+                                    previous_options_wifi_submenu = WIFI_INFO;
+
+                                    wifi_info_graphics();
+
+                                }
+
+                                
+
+                                if (is_connected)
+                                {
+                                    tft.locate(200, 90);
+
+                                    tft.foreground(Green);
+
+                                    tft.printf("Connected");
+
+                                    tft.locate(200, 130);
+
+                                    tft.printf("%.10s",ssid);
+                                    printf("%s",ssid);
+
+                                    tft.locate(200, 170);
+
+                                    tft.printf("%s",ip_address);
+                                    printf(" ip =%s",ip_address);
+
+                                    tft.locate(200, 210);
+
+                                    tft.printf("%s",mac_address);
+                                    printf("mac = %s",mac_address);
+
+                                    tft.locate(200, 250);
+
+                                    tft.printf("%d db",signal);
+                                }
+                                else 
+                                {
+                                    tft.locate(200, 90);
+
+                                    tft.foreground(Red);
+
+                                    tft.printf("Not connected");
+
+                                    tft.locate(200, 130);
+
+                                    tft.printf("-");
+
+                                    tft.locate(200, 170);
+
+                                    tft.printf("-");
+
+                                    tft.locate(200, 210);
+
+                                    tft.printf("-");
+
+                                    tft.locate(200, 250);
+
+                                    tft.printf("-");
+                                }
+
                         }
 
                         event_flag.wait_any(REFRESH_DISPLAY);
-  
+
                         break;
 
                     case STATISTICS:
@@ -876,6 +1106,16 @@ void display()
 
 
                         }
+
+                        tft.background( White);
+    
+                        tft.foreground(Black);
+    
+                        tft.set_font((unsigned char *)Arial24x23);
+
+                        tft.locate(160, 230);
+
+                        tft.printf("Under Construction...");
 
                         event_flag.wait_any(REFRESH_DISPLAY);
 
@@ -891,6 +1131,16 @@ void display()
 
 
                         }
+                        tft.background( White);
+    
+                        tft.foreground(Black);
+    
+                        tft.set_font((unsigned char *)Arial24x23);
+
+                        tft.locate(160, 230);
+
+                        tft.printf("Under Construction...");
+
 
                         event_flag.wait_any(REFRESH_DISPLAY);
 
@@ -903,7 +1153,7 @@ void display()
 
         }// menu
 
-        if (previous_menu != menu || previous_options_submenu != options_submenu )
+        if (previous_menu != menu || previous_options_submenu != options_submenu   )
         {
             
             tft.fillrect(28 , 50, 455, 291, BACKGROUND_MAIN);

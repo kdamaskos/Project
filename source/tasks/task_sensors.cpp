@@ -30,7 +30,7 @@ void sensors_task()
 {
     flow_sensor.mode(PullDown);
 
-    rain_sensor.mode(PullDown);
+    rain_sensor.mode(PullUp);
 
     flow_sensor.rise(&pulse_count);
 

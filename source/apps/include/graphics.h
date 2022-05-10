@@ -476,7 +476,7 @@ class Duration
                 for (int y=0; y< 8; y++) 
                 {
 
-                    tft.locate(x*46+243,77+y*27); 
+                    tft.locate(x*46+240,80+y*27); 
 
                     tft.printf("%d", durations[i][program]);
 
@@ -492,7 +492,7 @@ class Duration
             tft.set_font((unsigned char *)Goudy_Old_Style21x19);
             tft.foreground( Black); 
             tft.background( 0xF777); 
-            tft.locate( (valve/8) *46+243, 77+ ( valve%8) *27); 
+            tft.locate( (valve/8) *46+240, 80+ ( valve%8) *27); 
 
 
             tft.printf("%d", durations[valve][program]);
@@ -509,7 +509,7 @@ class Duration
             tft.foreground( White); 
             tft.background( Black); 
 
-            tft.locate( (valve/8) *46+243, 77+ ( valve%8) *27); 
+            tft.locate( (valve/8) *46+240, 80+ ( valve%8) *27); 
 
 
             tft.printf("%d", durations[valve][program]);
@@ -526,7 +526,7 @@ class Duration
 
             tft.foreground(White); 
             tft.background(Black); 
-            tft.locate( (valve/8) *46+243, 77+ ( valve%8) *27); 
+            tft.locate( (valve/8) *46+240, 80+ ( valve%8) *27); 
 
 
             tft.printf("%d", durations[valve][program]);
