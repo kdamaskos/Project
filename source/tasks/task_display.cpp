@@ -577,8 +577,9 @@ void display()
             case MANUAL:
             {
                 
-                if (previous_menu != menu)
+                if (previous_menu != menu || refresh_manual)
                 {
+                    refresh_manual = false;
                     previous_menu = MANUAL;
 
                     manual_graphics();
@@ -695,6 +696,15 @@ void display()
                             flow_table.draw();
                     
                             flow_table.populate((int *) flow);
+
+                        }
+
+                        if (flow_values_refresh)
+                        {
+                            flow_values_refresh = false;
+
+                            flow_table.populate((int *) flow);
+
 
                         }
   

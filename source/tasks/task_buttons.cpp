@@ -136,7 +136,7 @@ void buttons()
                             menu = MENU;
                             
                             publish_valves = 1;
-                            publish_starts = 1;
+                            //publish_starts = 1;
                             publish_days = 1;
 
                         } 

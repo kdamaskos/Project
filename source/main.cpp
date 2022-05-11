@@ -16,13 +16,13 @@
 
 Thread thread1(osPriorityNormal, 8 * 1024);
 
-Thread thread2(osPriorityNormal+9);
+Thread thread2(osPriorityNormal);
 
-Thread thread3(osPriorityNormal+5);
+Thread thread3(osPriorityNormal);
 
-Thread thread4(osPriorityNormal, 2* 1024 );
+Thread thread4(osPriorityNormal );
 
-Thread thread5(osPriorityNormal+10);
+Thread thread5(osPriorityNormal);
 
 
 int main() 
@@ -34,7 +34,7 @@ int main()
 
     thread1.start(callback(internet));
 
-    ThisThread::sleep_for(2s);
+   // ThisThread::sleep_for(2s);
 
     thread2.start(callback(display));
 

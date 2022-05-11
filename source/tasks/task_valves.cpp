@@ -16,6 +16,7 @@ extern DigitalIn rain_sensor;
 void valves_control() 
 {
 
+
     time_t seconds;
 
     struct tm *t;
@@ -26,15 +27,19 @@ void valves_control()
 
     while(1)
     {
-        
-        switch (menu) {
+
+        ThisThread::sleep_for(1s);
+
+        switch (menu) 
+        {
 
             case AUTO:
             {   
 
+                //printf("case auto\n");
+
                 if ( !is_watering )
                 {
-                    //printf("hello");
 
                     seconds = time(NULL);
 
@@ -140,22 +145,24 @@ void valves_control()
 
                 }
 
-                ThisThread::sleep_for(1s);
-
-
+                
                 break;
             }
 
             case MANUAL:
+            {
 
                 manualValves();
 
                 event_flag.wait_any(MANUAL_REFRESH);
                 
-
-
                 break;
             }
+        }
         
     }//while
+
+
+    printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
+
 }

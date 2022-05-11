@@ -87,7 +87,7 @@ extern  volatile int select_submenu;
 
 
 extern  bool refresh_display,refresh_elapsed_time,refresh_watering_valves, publish_valves, publish_starts, publish_water_budget,publish_days, publish_manual; 
-
+extern bool flow_values_refresh;
 
 extern  volatile int durations[TOTAL_ZONES][TOTAL_PROGRAMS]; // valvei = {x,duration,program} x is used to auto run 
 extern  volatile int start_times[TOTAL_STARTS][2][TOTAL_PROGRAMS]; 
@@ -103,7 +103,7 @@ extern int month;
 extern   int total_duration;
 extern  volatile int duration_remain[TOTAL_ZONES];
 
-extern bool refresh_rain_values;
+extern bool refresh_rain_values,refresh_manual;
 
 extern volatile int wifi_setup_selection ;
 

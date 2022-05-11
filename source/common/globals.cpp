@@ -49,7 +49,7 @@ char* location;
   volatile int day; 
   volatile int program;
   volatile bool is_watering=false;
-bool refresh_rain_values;
+bool refresh_rain_values,refresh_manual;
 
   volatile int timezone;
   volatile float supply_flow = 50;
@@ -69,6 +69,8 @@ char *ssid,*psw;
 
 
 bool flow_refresh;
+
+bool flow_values_refresh;
 
 bool temp_refresh;
 

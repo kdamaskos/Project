@@ -119,7 +119,14 @@ void calculate_schedule(int program )
 
     } while (valves_count != 0);
 
-    water_duration.total = (j-1)*INTERVAL_TIME;
+    
+    time_t seconds;
+
+    struct tm *t;
+    seconds = time(NULL);
+
+    t = localtime(&seconds);
+    water_duration.total = (j-1)*INTERVAL_TIME * water_budget[t->tm_mon] / 100;
 
     water_duration.sec = 0;
 

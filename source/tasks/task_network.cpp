@@ -246,7 +246,6 @@ reconnect:
 
     }
 
-
     if ((rc = client.subscribe("controller1/start_times", MQTT::QOS0,
                              messageArrived)) != 0) 
     {
@@ -265,6 +264,14 @@ reconnect:
 
     }
     if ((rc = client.subscribe("controller1/budget", MQTT::QOS0,
+                             messageArrived)) != 0) 
+    {
+
+        printf("rc from budget subscribe is %d\r\n", rc);
+       // goto reconnect;
+
+    }
+    if ((rc = client.subscribe("controller1/flow", MQTT::QOS0,
                              messageArrived)) != 0) 
     {
 

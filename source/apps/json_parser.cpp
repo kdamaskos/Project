@@ -3,7 +3,7 @@
 
 #include "mbed.h"
 #include <cstring>
-
+#include "apps/include/valves_control.h"
 
 
 /*
@@ -210,27 +210,36 @@ void deserialize(char *ret, int ln )
     else if (ret[2] == 'm') 
     { // manual json
 
-        ret = strchr(ret, '[') + 3;
+        ret = strchr(ret, '[') + 1;
 
         for (i = 0; i < TOTAL_ZONES; i++) 
         {
-            
+            ret = strchr(ret, '[') + 2;
             manual_valves[i] = atoi(ret);
 
-            ret = strchr(ret, '[') + 2;
+            
         }
-
+        ret = strchr(ret, ',');
         ret = strchr(ret, '"');
 
-        if (ret[1])
+        refresh_manual = true;
+        is_watering = false;
+
+
+        if (atoi(ret+1) == 1)
         {
+
             menu = MANUAL;
 
         }
         else 
         {
+
             menu = AUTO;
         }
+
+
+        event_flag.set(MANUAL_REFRESH);
 
     }
     else if (ret[2] == 't') 
@@ -282,6 +291,25 @@ void deserialize(char *ret, int ln )
         end[0] = NULL;
 
         weather_refresh = true;
+
+    }
+    else if (ret[2] == 'f') 
+    {
+
+        ret = strchr(ret, '[') + 1;
+
+        supply_flow = atoi(ret);
+
+        for (i = 0; i < TOTAL_ZONES; i++) 
+        {
+            ret = strchr(ret, ',') + 1;
+
+            flow[i] = atoi(ret);
+
+            
+        }
+
+        flow_values_refresh = true;
 
     }
 
